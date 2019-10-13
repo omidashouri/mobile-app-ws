@@ -1,4 +1,4 @@
-package ir.omidashouri.mobileappws.controller.v1;
+package ir.omidashouri.mobileappws.controllers.v1;
 
 import org.springframework.web.bind.annotation.*;
 
