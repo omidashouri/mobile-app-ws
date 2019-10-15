@@ -1,5 +1,7 @@
 package ir.omidashouri.mobileappws.controllers.v1;
 
+import ir.omidashouri.mobileappws.models.request.UserDetailsRequestModel;
+import ir.omidashouri.mobileappws.models.response.UserRest;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,8 +14,8 @@ public class UserController {
     }
 
     @PostMapping
-    public String createUser(){
-        return "create user was called";
+    public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails){
+        return null;
     }
 
     @PutMapping
