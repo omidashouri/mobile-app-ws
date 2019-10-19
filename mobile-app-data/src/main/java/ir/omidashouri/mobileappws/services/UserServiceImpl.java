@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -40,8 +42,15 @@ public class UserServiceImpl implements UserService {
         return userMapper.UserToUserDto(savedUser);
     }
 
+    //    email here is as a username filed
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return null;
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findUserByEmail(email);
+        if(user == null){
+            throw new UsernameNotFoundException("user name not found for "+email);
+        }
+        return new org.springframework.security.core.userdetails.User(user.getEmail()
+                , user.getEncryptedPassword()
+                ,new ArrayList<>());
     }
 }
