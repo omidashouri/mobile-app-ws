@@ -1,5 +1,6 @@
 package ir.omidashouri.mobileappws.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,13 +15,28 @@ public class UserDto implements Serializable {
 
     private static final long serialVersionUID = -1079136277809889720L;
     private Long id;
+
+    @JsonProperty("user_id")
     private String userId;
+
+    @JsonProperty("first_name")
     private String firstName;
+
+    @JsonProperty("last_name")
     private String lastName;
+
+    @JsonProperty("email")
     private String email;
+
     private String password;
+
+    @JsonProperty("encrypted_password")
     private String encryptedPassword;
+
+    @JsonProperty("email_verification_token")
     private String emailVerificationToken;
-    private String emailVerificationStatus;
+
+    @JsonProperty("email_verification_status")
+    private Boolean emailVerificationStatus = false;
 
 }
