@@ -10,4 +10,6 @@ public class MobileAppWsApplication {
         SpringApplication.run(MobileAppWsApplication.class, args);
     }
 
+
+
 }
