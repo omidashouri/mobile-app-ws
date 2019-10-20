@@ -13,3 +13,25 @@ public class UserDetailsRequestModel {
     private String email;
     private String password;
 }
+
+/* Json Post
+
+http://localhost:8080/users/v1/
+        {
+        "firstName":"omid",
+        "lastName":"ashouri",
+        "email":"omidashouri@gmail.com",
+        "password":"123"
+        }
+
+
+--------------------
+http://localhost:8080/login
+
+{
+	"email":"omidashouri@gmail.com",
+	"password":"123"
+}
+
+
+        */

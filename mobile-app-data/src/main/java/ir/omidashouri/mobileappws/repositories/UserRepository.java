@@ -8,5 +8,9 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends CrudRepository<User,Long> {
     User findUserByEmail(String email);
 
+    Iterable<User> findAllByEmail(String email);
+
+    User findByEmail(String email);
+
     User findUserByUserId(String userId);
 }

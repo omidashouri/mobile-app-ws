@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -42,13 +43,25 @@ public class UserServiceImpl implements UserService {
         return userMapper.UserToUserDto(savedUser);
     }
 
+    @Override
+    public List<User> findAllUserByEmail(String email) {
+        List<User> users = new ArrayList<>();
+        userRepository.findAllByEmail(email).forEach(users::add);
+        return users;
+    }
+
     //    email here is as a username filed
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findUserByEmail(email);
-        if(user == null){
+
+//        for test i have list
+        List<User> users = this.findAllUserByEmail(email);
+        if(users.isEmpty() || users.size() == 0){
             throw new UsernameNotFoundException("user name not found for "+email);
         }
+
+        User user = users.get(0);
+
         return new org.springframework.security.core.userdetails.User(user.getEmail()
                 , user.getEncryptedPassword()
                 ,new ArrayList<>());
