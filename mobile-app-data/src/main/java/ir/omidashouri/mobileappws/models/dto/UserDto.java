@@ -13,6 +13,8 @@ import java.io.Serializable;
 public class UserDto implements Serializable {
 
 
+//    Data Transfer Object = Dto
+
     private static final long serialVersionUID = -1079136277809889720L;
     private Long id;
 

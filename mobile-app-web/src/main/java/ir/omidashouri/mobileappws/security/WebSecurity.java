@@ -23,6 +23,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
         .and()
+//                implemented in package security.AuthenticationFilter
         .addFilter(new AuthenticationFilter(authenticationManager()));
     }
 

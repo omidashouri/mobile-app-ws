@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
     }
 
     //    email here is as a username filed
+    //    implement fom  interface UserDetailsService, which extend in UserService
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
