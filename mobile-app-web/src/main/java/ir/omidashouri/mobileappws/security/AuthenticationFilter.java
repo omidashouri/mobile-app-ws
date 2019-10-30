@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
+//    this class is import with extending  UsernamePasswordAuthenticationFilter
     private final AuthenticationManager authenticationManager;
 
     private String contentType;
@@ -30,6 +32,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         this.authenticationManager = authenticationManager;
     }
 
+//    this method is used for authenticating user when request come to server
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException {
@@ -40,6 +43,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 //            our class model for reading username and password
             UserLoginRequestModel creds = new ObjectMapper()
                     .readValue(req.getInputStream(), UserLoginRequestModel.class);
+
+//            use the method we implement in our service to identify user
 
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -54,6 +59,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         }
     }
 
+//  if username and password is correct  this method is called, set token in header
     @Override
     protected void successfulAuthentication(HttpServletRequest req,
                                             HttpServletResponse res,

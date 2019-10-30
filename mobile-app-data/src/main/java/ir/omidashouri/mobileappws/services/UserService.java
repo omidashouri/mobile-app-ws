@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface UserService extends UserDetailsService {
 
+//    after extends we should implements  loadUserByUsername method
+
     UserDto createUserDto(UserDto userDto);
 
     List<User> findAllUserByEmail(String email);

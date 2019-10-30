@@ -50,8 +50,9 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
+
+    //    implement from  interface UserDetailsService, which extend in our UserService interface
     //    email here is as a username filed
-    //    implement fom  interface UserDetailsService, which extend in UserService
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 

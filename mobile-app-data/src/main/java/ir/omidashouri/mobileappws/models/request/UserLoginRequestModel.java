@@ -11,6 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserLoginRequestModel {
+
+//    create this for user sign in request
+
     private String email;
     private String password;
 }
