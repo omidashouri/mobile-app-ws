@@ -33,7 +33,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
 //  we add AuthenticationManager class in package security.AuthenticationFilter
 //  we specify how authenticate for other urls
-        .addFilter(new AuthenticationFilter(authenticationManager()));
+        .addFilter(getAuthenticationFilter());
     }
 
 //    we specify interface to use for UserDetailsService which here extends UserDetailsService spring
@@ -44,5 +44,13 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         authenticationManagerBuilder.userDetailsService(userService)
                 //omiddo: do my implementation for password encoding
                 .passwordEncoder(bCryptPasswordEncoder);
+    }
+
+//    specify new path for authentication path instead http://localhost:8080/login
+//    to http://localhost:8080/users/login
+    public AuthenticationFilter getAuthenticationFilter() throws Exception{
+        final AuthenticationFilter filter = new AuthenticationFilter(authenticationManager());
+        filter.setFilterProcessesUrl("/users/login");
+        return filter;
     }
 }

@@ -1,5 +1,9 @@
 package ir.omidashouri.mobileappws.models.request;
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Getter
@@ -26,7 +30,7 @@ http://localhost:8080/users/v1/
 
 
 --------------------
-http://localhost:8080/login
+http://localhost:8080/users/login
 
 {
 	"email":"omidashouri@gmail.com",
