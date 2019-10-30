@@ -6,6 +6,8 @@ import org.springframework.context.ApplicationContextAware;
 
 public class SpringApplicationContext implements ApplicationContextAware {
 
+//    use this class to have access to application Context Objects
+
     private static ApplicationContext CONTEXT;
 
     @Override

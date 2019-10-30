@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import ir.omidashouri.mobileappws.configurations.SpringApplicationContext;
+import ir.omidashouri.mobileappws.models.dto.UserDto;
 import ir.omidashouri.mobileappws.models.request.UserLoginRequestModel;
 import ir.omidashouri.mobileappws.services.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -73,12 +74,17 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET )
                 .compact();
+
 //        get bean from context, bean name is name of class start with lowercase
         UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
-//        UserDto userDto = userService.getUser(userName);
+
+//    use for adding public user id to response header
+        UserDto userDto = userService.getUserDto(userName);
 
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
-//        res.addHeader("UserID", userDto.getUserId());
+
+//    add public user id to response header
+        res.addHeader("UserID", userDto.getUserId());
 
     }
 

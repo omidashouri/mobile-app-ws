@@ -14,5 +14,8 @@ public interface UserService extends UserDetailsService {
 
     UserDto createUserDto(UserDto userDto);
 
+//    add public user id to response header
+    UserDto getUserDto(String email);
+
     List<User> findAllUserByEmail(String email);
 }

@@ -13,6 +13,8 @@ public class AppConfig {
         return new BCryptPasswordEncoder();
     }
 
+//    add this to have access to make it available for application context
+//    in order to get objects
     @Bean
     public SpringApplicationContext springApplicationContext(){
         return new SpringApplicationContext();
