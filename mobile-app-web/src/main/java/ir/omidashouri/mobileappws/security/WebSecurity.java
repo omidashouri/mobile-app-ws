@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableWebSecurity
@@ -33,7 +34,16 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
 //  we add AuthenticationManager class in package security.AuthenticationFilter
 //  we specify how authenticate for other urls
-        .addFilter(getAuthenticationFilter());
+        .addFilter(getAuthenticationFilter())
+
+//  add authorization class that we build
+        .addFilter(new AuthorizationFilter(authenticationManager()))
+
+//  to remove caching  in browser and force every request to have
+//  authorization token in header and do not cache it
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        ;
     }
 
 //    we specify interface to use for UserDetailsService which here extends UserDetailsService spring

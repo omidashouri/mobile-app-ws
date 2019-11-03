@@ -43,14 +43,14 @@ public class UserServiceImpl implements UserService {
         return userMapper.UserToUserDto(savedUser);
     }
 
-//    add public user id to response header
+    //    add public user id to response header
     @Override
     public UserDto getUserDto(String email) {
 
         List<User> users = this.findAllUserByEmail(email);
 
-        if(users.isEmpty() || users.size() == 0){
-            throw new UsernameNotFoundException("user name not found for "+email);
+        if (users.isEmpty() || users.size() == 0) {
+            throw new UsernameNotFoundException("user name not found for " + email);
         }
 
         UserDto userDto = userMapper.UserToUserDto(users.get(0));
@@ -73,14 +73,14 @@ public class UserServiceImpl implements UserService {
 
 //        for test i have list
         List<User> users = this.findAllUserByEmail(email);
-        if(users.isEmpty() || users.size() == 0){
-            throw new UsernameNotFoundException("user name not found for "+email);
+        if (users.isEmpty() || users.size() == 0) {
+            throw new UsernameNotFoundException("user name not found for " + email);
         }
 
         User user = users.get(0);
 
         return new org.springframework.security.core.userdetails.User(user.getEmail()
                 , user.getEncryptedPassword()
-                ,new ArrayList<>());
+                , new ArrayList<>());
     }
 }
