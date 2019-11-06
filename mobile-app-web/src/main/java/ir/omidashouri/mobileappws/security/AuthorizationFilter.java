@@ -22,9 +22,9 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 
     //    override this method to allow filtering the request and add it to WebSecurity class
     @Override
-    public void doFilterInternal(HttpServletRequest request,
-                                 HttpServletResponse response,
-                                 FilterChain filterChain) throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws IOException, ServletException {
 
         String header = request.getHeader(SecurityConstants.HEADER_STRING);
 

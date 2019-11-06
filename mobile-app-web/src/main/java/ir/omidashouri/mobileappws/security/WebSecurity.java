@@ -42,8 +42,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 //  to remove caching  in browser and force every request to have
 //  authorization token in header and do not cache it
         .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        ;
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
 //    we specify interface to use for UserDetailsService which here extends UserDetailsService spring
