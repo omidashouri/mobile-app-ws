@@ -9,15 +9,24 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("users/v1") //http:localhost:8080/users/v1
+@RequestMapping("users/v1")
+
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping
-    public String getUser(){
-        return "get user was called";
+    //http://localhost:8080/users/v1/aLIRVt88hdQ858q5AMURm1QI6DC3Je
+    @GetMapping(path = "/{userPublicId}")
+    public UserRest getUser(@PathVariable String userPublicId){
+
+        UserRest returnValue = new UserRest();
+
+        UserDto userDto = userService.getUserByUserPublicId(userPublicId);
+
+        BeanUtils.copyProperties(userDto,returnValue);
+
+        return returnValue;
     }
 
     @PostMapping

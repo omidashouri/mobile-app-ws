@@ -65,6 +65,22 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
+    @Override
+    public UserDto getUserByUserPublicId(String userPublicId) {
+        UserDto returnedUser = new UserDto();
+
+        User userDomain =  userRepository.findUserByUserId(userPublicId);
+
+        if(userDomain==null){
+            throw new UsernameNotFoundException("user public id not found for " + userPublicId);
+        }
+
+        returnedUser = userMapper.UserToUserDto(userDomain);
+
+        return returnedUser;
+
+    }
+
 
     //    implement from  interface UserDetailsService, which extend in our UserService interface
     //    email here is as a username filed

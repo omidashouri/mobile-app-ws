@@ -12,5 +12,8 @@ public interface UserRepository extends CrudRepository<User,Long> {
 
     User findByEmail(String email);
 
+//  use FIND to select record
+//  use BY to specify which field
+//  then specify the field name
     User findUserByUserId(String userId);
 }
