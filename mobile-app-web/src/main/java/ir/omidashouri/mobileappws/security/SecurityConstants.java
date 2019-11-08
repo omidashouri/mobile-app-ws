@@ -15,13 +15,19 @@ public class SecurityConstants {
 //    public static final String TOKEN_SECRET = "jf9i4jgu83nfl0jfu57ejf7";
 
     public static String getTokenSecret(){
+//        getting the bean with 'AnnotationConfigApplicationContext' so
+//        there is no need to define AppProperties as Bean
+//        with @Configuration annotation spring context know it
+
         ApplicationContext ctx = new AnnotationConfigApplicationContext(AppProperties.class);
         var appProperties =  ctx.getBean(AppProperties.class);
         return appProperties.getTokenSecretEn();
 
+//        if use @Component for AppProperties class
+//        then we should define it as bean and
+//        then get it with SpringApplicationContext as bellow
 /*        AppProperties appProperties = (AppProperties) SpringApplicationContext.getBean(AppProperties.properties());
-        return appProperties.getTokenPrefix();
-        return null;*/
+        return appProperties.getTokenSecretEn();*/
     }
 
 }
