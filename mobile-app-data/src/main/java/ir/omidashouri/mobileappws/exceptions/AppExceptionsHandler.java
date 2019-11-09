@@ -30,6 +30,7 @@ public class AppExceptionsHandler {
 public ResponseEntity<Object> handleOtherException(Exception exception,
                                                          WebRequest request){
 
+//  for security change 'exception.getMessage()' to 'other exception occurred'
     ErrorMessage errorMessage = new ErrorMessage(new Date(), exception.getMessage());
 
     return new ResponseEntity<>(errorMessage,
