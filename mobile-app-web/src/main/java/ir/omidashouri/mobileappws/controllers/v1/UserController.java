@@ -2,8 +2,11 @@ package ir.omidashouri.mobileappws.controllers.v1;
 
 import ir.omidashouri.mobileappws.exceptions.UserServiceException;
 import ir.omidashouri.mobileappws.models.dto.UserDto;
+import ir.omidashouri.mobileappws.models.request.RequestOperationName;
+import ir.omidashouri.mobileappws.models.request.RequestOperationStatus;
 import ir.omidashouri.mobileappws.models.request.UserDetailsRequestModel;
 import ir.omidashouri.mobileappws.models.response.ErrorMessages;
+import ir.omidashouri.mobileappws.models.response.OperationStatusModel;
 import ir.omidashouri.mobileappws.models.response.UserRest;
 import ir.omidashouri.mobileappws.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -74,9 +77,17 @@ public class UserController {
         return returnValue;
     }
 
-    @DeleteMapping
-    public String deleteUser(){
-        return "delete user was called";
+    @DeleteMapping(path = "/{userPublicId}"
+    ,produces = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE})
+    public OperationStatusModel deleteUser(@PathVariable String userPublicId){
+
+        OperationStatusModel operationStatusModel = new OperationStatusModel();
+        operationStatusModel.setOperationName(RequestOperationName.DELETE.name());
+
+        userService.deleteUserDto(userPublicId);
+
+        operationStatusModel.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        return operationStatusModel;
     }
 
 }

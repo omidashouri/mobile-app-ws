@@ -105,6 +105,18 @@ public class UserServiceImpl implements UserService {
         return userMapper.UserToUserDto(updatedUser);
     }
 
+    @Override
+    public void deleteUserDto(String publicUserId) {
+
+        User userDomain =  userRepository.findUserByUserId(publicUserId);
+
+        if(userDomain==null){
+            throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage() + publicUserId);
+        }
+
+        userRepository.delete(userDomain);
+    }
+
 
     //    implement from  interface UserDetailsService, which extend in our UserService interface
     //    email here is as a username filed
