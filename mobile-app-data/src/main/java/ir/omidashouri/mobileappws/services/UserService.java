@@ -20,4 +20,6 @@ public interface UserService extends UserDetailsService {
     List<User> findAllUserByEmail(String email);
 
     UserDto getUserByUserPublicId(String userPublicId);
+
+    UserDto updateUserDto(String publicUserId, UserDto userDto);
 }

@@ -51,16 +51,27 @@ public class UserController {
 
         BeanUtils.copyProperties(userDetails,userDto);
 
-        userDto = userService.createUserDto(userDto);
+        UserDto createdUserDto = userService.createUserDto(userDto);
 
-        BeanUtils.copyProperties(userDto,returnValue);
+        BeanUtils.copyProperties(createdUserDto,returnValue);
 
         return returnValue;
     }
 
-    @PutMapping
-    public String updateUser(){
-        return "update user was called";
+    @PutMapping(path = "/{userPublicId}",
+            consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE}
+            ,produces = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE})
+//    PathVariable is in url and RequestBody is in the body(raw) part of request
+    public UserRest updateUser(@PathVariable String userPublicId,@RequestBody UserDetailsRequestModel userDetails){
+        UserRest returnValue = new UserRest();
+
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(userDetails,userDto);
+
+        UserDto updatedUserDto = userService.updateUserDto(userPublicId, userDto);
+        BeanUtils.copyProperties(updatedUserDto,returnValue);
+
+        return returnValue;
     }
 
     @DeleteMapping

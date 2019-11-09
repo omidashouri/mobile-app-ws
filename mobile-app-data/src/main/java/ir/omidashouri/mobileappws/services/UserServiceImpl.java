@@ -1,8 +1,10 @@
 package ir.omidashouri.mobileappws.services;
 
 import ir.omidashouri.mobileappws.domain.User;
+import ir.omidashouri.mobileappws.exceptions.UserServiceException;
 import ir.omidashouri.mobileappws.mapper.UserMapper;
 import ir.omidashouri.mobileappws.models.dto.UserDto;
+import ir.omidashouri.mobileappws.models.response.ErrorMessages;
 import ir.omidashouri.mobileappws.repositories.UserRepository;
 import ir.omidashouri.mobileappws.utilities.Utils;
 import lombok.RequiredArgsConstructor;
@@ -79,6 +81,28 @@ public class UserServiceImpl implements UserService {
 
         return returnedUser;
 
+    }
+
+    @Override
+    public UserDto updateUserDto(String publicUserId, UserDto userDto) {
+        UserDto returnedUser = new UserDto();
+
+        User userDomain =  userRepository.findUserByUserId(publicUserId);
+
+        if(userDomain==null){
+            throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage() + publicUserId);
+        }
+
+        if(!userDto.getFirstName().isEmpty()){
+            userDomain.setFirstName(userDto.getFirstName());
+        }
+
+        if(!userDto.getLastName().isEmpty()){
+            userDomain.setLastName(userDto.getLastName());
+        }
+
+        User updatedUser = userRepository.save(userDomain);
+        return userMapper.UserToUserDto(updatedUser);
     }
 
 
