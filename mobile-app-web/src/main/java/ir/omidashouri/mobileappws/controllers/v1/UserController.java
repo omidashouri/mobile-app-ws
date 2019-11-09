@@ -1,7 +1,9 @@
 package ir.omidashouri.mobileappws.controllers.v1;
 
+import ir.omidashouri.mobileappws.exceptions.UserServiceException;
 import ir.omidashouri.mobileappws.models.dto.UserDto;
 import ir.omidashouri.mobileappws.models.request.UserDetailsRequestModel;
+import ir.omidashouri.mobileappws.models.response.ErrorMessages;
 import ir.omidashouri.mobileappws.models.response.UserRest;
 import ir.omidashouri.mobileappws.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -37,9 +39,13 @@ public class UserController {
 //            consume for accepting XML or jason in RequestBody
              consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE}
             ,produces = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE})
-    public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails){
+    public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
 
         UserRest returnValue = new UserRest();
+
+        if(userDetails.getFirstName().isEmpty()){
+            throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
+        }
 
         UserDto userDto = new UserDto();
 
