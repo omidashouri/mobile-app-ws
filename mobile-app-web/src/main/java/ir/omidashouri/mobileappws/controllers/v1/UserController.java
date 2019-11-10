@@ -15,8 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("users/v1")
-
+@RequestMapping("v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
