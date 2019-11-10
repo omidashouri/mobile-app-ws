@@ -8,6 +8,9 @@ import ir.omidashouri.mobileappws.models.response.ErrorMessages;
 import ir.omidashouri.mobileappws.repositories.UserRepository;
 import ir.omidashouri.mobileappws.utilities.Utils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -71,9 +75,9 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserByUserPublicId(String userPublicId) {
         UserDto returnedUser = new UserDto();
 
-        User userDomain =  userRepository.findUserByUserId(userPublicId);
+        User userDomain = userRepository.findUserByUserId(userPublicId);
 
-        if(userDomain==null){
+        if (userDomain == null) {
             throw new UsernameNotFoundException("user public id not found for " + userPublicId);
         }
 
@@ -87,17 +91,17 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUserDto(String publicUserId, UserDto userDto) {
         UserDto returnedUser = new UserDto();
 
-        User userDomain =  userRepository.findUserByUserId(publicUserId);
+        User userDomain = userRepository.findUserByUserId(publicUserId);
 
-        if(userDomain==null){
+        if (userDomain == null) {
             throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage() + publicUserId);
         }
 
-        if(!userDto.getFirstName().isEmpty()){
+        if (!userDto.getFirstName().isEmpty()) {
             userDomain.setFirstName(userDto.getFirstName());
         }
 
-        if(!userDto.getLastName().isEmpty()){
+        if (!userDto.getLastName().isEmpty()) {
             userDomain.setLastName(userDto.getLastName());
         }
 
@@ -108,13 +112,32 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserDto(String publicUserId) {
 
-        User userDomain =  userRepository.findUserByUserId(publicUserId);
+        User userDomain = userRepository.findUserByUserId(publicUserId);
 
-        if(userDomain==null){
+        if (userDomain == null) {
             throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage() + publicUserId);
         }
 
         userRepository.delete(userDomain);
+    }
+
+    @Override
+    public List<UserDto> getUserDtosByPageAndLimit(int page, int limit) {
+
+        List<UserDto> userDtoList = new ArrayList<>();
+//        page start from zero
+        if (page > 0) {
+            page--;
+        }
+
+        Pageable pageable = PageRequest.of(page,limit);
+        Page<User> usersPage = userRepository.findAll(pageable);
+
+        List<User> users = usersPage.getContent();
+
+        userDtoList = users.stream().map(userMapper::UserToUserDto).collect(Collectors.toList());
+
+        return userDtoList;
     }
 
 
