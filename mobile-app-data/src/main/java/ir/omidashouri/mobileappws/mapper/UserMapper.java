@@ -20,8 +20,9 @@ public interface UserMapper {
             @Mapping(source = "email",target = "email"),
             @Mapping(source = "encryptedPassword",target = "encryptedPassword"),
             @Mapping(source = "emailVerificationToken",target = "emailVerificationToken"),
-            @Mapping(source = "emailVerificationStatus",target = "emailVerificationStatus"),
-            @Mapping(source = "addresses",target = "addresses")
+            @Mapping(source = "emailVerificationStatus",target = "emailVerificationStatus")
+/*            ,
+            @Mapping(source = "addresses",target = "addresses")*/
     })
     UserDto UserToUserDto(User user);
 
@@ -33,8 +34,9 @@ public interface UserMapper {
             @Mapping(source = "email",target = "email"),
             @Mapping(source = "encryptedPassword",target = "encryptedPassword"),
             @Mapping(source = "emailVerificationToken",target = "emailVerificationToken"),
-            @Mapping(source = "emailVerificationStatus",target = "emailVerificationStatus"),
-            @Mapping(source = "addresses",target = "addresses")
+            @Mapping(source = "emailVerificationStatus",target = "emailVerificationStatus")
+/*            ,
+            @Mapping(source = "addresses",target = "addresses")*/
     })
     User UserDtoToUser(UserDto userDto);
 }

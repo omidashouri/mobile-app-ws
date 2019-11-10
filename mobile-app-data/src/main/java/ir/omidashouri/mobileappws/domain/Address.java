@@ -35,8 +35,8 @@ public class Address extends BaseEntity{
     @Column(name= "TYPE")
     private String type;
 
-    @Column(name= "USER_ID")
-    private User user;
+/*    @Column(name= "USER_ID")
+    private User user;*/
 
 
 }

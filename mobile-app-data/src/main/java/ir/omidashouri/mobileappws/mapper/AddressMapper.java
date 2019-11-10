@@ -18,8 +18,9 @@ public interface AddressMapper {
             @Mapping(source = "country",target = "country"),
             @Mapping(source = "streetName",target = "streetName"),
             @Mapping(source = "postalCode",target = "postalCode"),
-            @Mapping(source = "type",target = "type"),
-            @Mapping(source = "user",target = "userDetails")
+            @Mapping(source = "type",target = "type")
+/*            ,
+            @Mapping(source = "user",target = "userDetails")*/
     })
     AddressDto AddressToAddressDto(Address address);
 
@@ -29,8 +30,9 @@ public interface AddressMapper {
             @Mapping(source = "country",target = "country"),
             @Mapping(source = "streetName",target = "streetName"),
             @Mapping(source = "postalCode",target = "postalCode"),
-            @Mapping(source = "type",target = "type"),
-            @Mapping(source = "userDetails",target = "user")
+            @Mapping(source = "type",target = "type")
+/*            ,
+            @Mapping(source = "userDetails",target = "user")*/
     })
     Address AddressDtoToAddress(AddressDto addressDto);
 
