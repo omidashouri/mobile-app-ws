@@ -13,13 +13,13 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "TBL_ADDRESS",schema = "photo_app")
-public class Address {
+public class Address extends BaseEntity {
 
     private static final long serialVersionUID = -2935476350760223385L;
 
-    @Id
+/*    @Id
     @GeneratedValue
-    private Long id;
+    private Long id;*/
 
     @Column(name= "ADDRESS_PUBLIC_ID",length = 30,nullable = false)
     private String addressPublicId;

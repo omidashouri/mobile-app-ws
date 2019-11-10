@@ -1,6 +1,5 @@
 package ir.omidashouri.mobileappws.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,7 +37,7 @@ public class User extends BaseEntity {
     @Column(name = "EMAIL_VERIFICATION_STATUS")
     private Boolean emailVerificationStatus = false;
 
-    @JsonManagedReference
+//    @JsonManagedReference
     @OneToMany(mappedBy = "userId",cascade = CascadeType.ALL)
     private List<Address> addresses;
 
