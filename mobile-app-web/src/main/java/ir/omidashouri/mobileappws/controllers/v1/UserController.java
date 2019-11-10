@@ -80,6 +80,7 @@ public class UserController {
 
         UserDto createdUserDto = userService.createUserDto(userDto);
 
+//omiddo: change it later with mapper
         BeanUtils.copyProperties(createdUserDto,returnValue);
 
         return returnValue;

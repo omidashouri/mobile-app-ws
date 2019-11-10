@@ -14,25 +14,25 @@ public interface AddressMapper {
 
     @Mappings({
             @Mapping(source = "id",target = "id"),
+            @Mapping(source = "addressId",target = "addressId"),
             @Mapping(source = "city",target = "city"),
             @Mapping(source = "country",target = "country"),
             @Mapping(source = "streetName",target = "streetName"),
             @Mapping(source = "postalCode",target = "postalCode"),
-            @Mapping(source = "type",target = "type")
-/*            ,
-            @Mapping(source = "user",target = "userDetails")*/
+            @Mapping(source = "type",target = "type"),
+            @Mapping(source = "userId",target = "userDetails")
     })
     AddressDto AddressToAddressDto(Address address);
 
     @Mappings({
             @Mapping(source = "id",target = "id"),
+            @Mapping(source = "addressId",target = "addressId"),
             @Mapping(source = "city",target = "city"),
             @Mapping(source = "country",target = "country"),
             @Mapping(source = "streetName",target = "streetName"),
             @Mapping(source = "postalCode",target = "postalCode"),
-            @Mapping(source = "type",target = "type")
-/*            ,
-            @Mapping(source = "userDetails",target = "user")*/
+            @Mapping(source = "type",target = "type"),
+            @Mapping(source = "userDetails",target = "userId")
     })
     Address AddressDtoToAddress(AddressDto addressDto);
 

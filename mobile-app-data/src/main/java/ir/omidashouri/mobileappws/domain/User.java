@@ -5,9 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,7 +37,7 @@ public class User extends BaseEntity {
     @Column(name = "EMAIL_VERIFICATION_STATUS")
     private Boolean emailVerificationStatus = false;
 
-/*    @Column(name = "ADDRESS_ID")
-    private List<Address> addresses;*/
+    @OneToMany(mappedBy = "userId",cascade = CascadeType.ALL)
+    private List<Address> addresses;
 
 }

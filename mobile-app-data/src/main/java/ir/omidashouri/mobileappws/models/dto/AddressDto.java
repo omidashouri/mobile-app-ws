@@ -15,6 +15,9 @@ public class AddressDto implements Serializable {
 
     private Long id;
 
+    @JsonProperty("address_id")
+    private String AddressId;
+
     @JsonProperty("city")
     private String city;
 

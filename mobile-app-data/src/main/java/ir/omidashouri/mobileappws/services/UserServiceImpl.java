@@ -3,6 +3,7 @@ package ir.omidashouri.mobileappws.services;
 import ir.omidashouri.mobileappws.domain.User;
 import ir.omidashouri.mobileappws.exceptions.UserServiceException;
 import ir.omidashouri.mobileappws.mapper.UserMapper;
+import ir.omidashouri.mobileappws.models.dto.AddressDto;
 import ir.omidashouri.mobileappws.models.dto.UserDto;
 import ir.omidashouri.mobileappws.models.response.ErrorMessages;
 import ir.omidashouri.mobileappws.repositories.UserRepository;
@@ -33,10 +34,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUserDto(UserDto userDto) {
 
-        User recievedUser = userRepository.findUserByUserId(userDto.getUserId());
+        User receivedUser = userRepository.findUserByUserId(userDto.getUserId());
 
-        if (recievedUser != null) {
+        if (receivedUser != null) {
             throw new RuntimeException("user is duplicate");
+        }
+
+        for(AddressDto addressDto : userDto.getAddresses()){
+            int i=0;
+            addressDto.setUserDetails(userDto);
+            addressDto.setAddressId(utils.generateAddressId(30));
+            userDto.getAddresses().set(i,addressDto);
+            i++;
         }
 
         User newUser = userMapper.UserDtoToUser(userDto);
