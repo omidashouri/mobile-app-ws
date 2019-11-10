@@ -17,29 +17,26 @@ INSERT INTO photo_app.tbl_user
     ;
 
 INSERT INTO photo_app.tbl_address
-    (address_id,user_id,country,city,street_address)
+    (address_id,user_id,country,city,
+     street_name,postal_code,type)
     VALUES
-    ('?','1','IRAN','Tehran',
-     '123 ABC Street')
+    ('12','1','IRAN','Tehran',
+     '123 ABC Street','123456','billing')
      ,
-    ('?','1','IRAN','Tehran',
-     '456 DEF Street')
+    ('34','1','IRAN','Tehran',
+     '456 DEF Street','123456','cash')
      ,
-    ('?','2','GILAN','Rasht',
-     '123 ABC Street'
-     )
+    ('56','2','GILAN','Rasht',
+     '123 ABC Street','123456','billing')
      ,
-    ('?','2','GILAN','Rasht',
-     '456 DEF Street'
-    )
+    ('78','2','GILAN','Rasht',
+     '456 DEF Street','123456','cash')
     ,
-    ('?','3','KHORASAN','Mashhad',
-     '123 ABC Street'
-     )
+    ('910','3','KHORASAN','Mashhad',
+     '123 ABC Street','123456','billing')
      ,
-    ('?','3','KHORASAN','Mashhad',
-     '456 DEF Street'
-    )
+    ('1112','3','KHORASAN','Mashhad',
+     '456 DEF Street','123456','cash')
     ;
 
 

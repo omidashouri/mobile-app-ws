@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -40,5 +41,8 @@ public class UserDto implements Serializable {
 
     @JsonProperty("email_verification_status")
     private Boolean emailVerificationStatus = false;
+
+    @JsonProperty("addresses")
+    private List<AddressDto> addresses;
 
 }

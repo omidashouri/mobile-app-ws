@@ -58,3 +58,26 @@ Spring RESTful Web Services, Java, Spring Boot, Spring MVC and JPA
         
         
     
+    
+-----------------------
+{
+	"email":"omidashouri3@gmail.com",
+	"password":"123",
+	"firstName":"omid",
+	"lastName":"ashouri",
+	"addresses":[
+					{
+					"city":"vancover",
+					"country":"canada",
+					"streetName":"",
+					"postalCode":"123456",
+					"type":"billing"
+					},{
+					"city":"vancover",
+					"country":"canada",
+					"streetName":"",
+					"postalCode":"123456",
+					"type":"billing"	
+					}
+				]
+}

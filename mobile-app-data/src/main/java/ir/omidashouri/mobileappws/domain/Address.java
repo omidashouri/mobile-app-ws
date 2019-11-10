@@ -26,8 +26,17 @@ public class Address extends BaseEntity{
     @Column(name= "CITY",length = 50)
     private String city;
 
-    @Column(name= "STREET_ADDRESS")
-    private String streetAddress;
+    @Column(name= "STREET_NAME")
+    private String streetName;
+
+    @Column(name= "POSTAL_CODE")
+    private String postalCode;
+
+    @Column(name= "TYPE")
+    private String type;
+
+    @Column(name= "USER_ID")
+    private User user;
 
 
 }

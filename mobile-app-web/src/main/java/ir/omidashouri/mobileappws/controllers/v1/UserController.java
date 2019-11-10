@@ -1,6 +1,7 @@
 package ir.omidashouri.mobileappws.controllers.v1;
 
 import ir.omidashouri.mobileappws.exceptions.UserServiceException;
+import ir.omidashouri.mobileappws.mapper.UserDtoUserReqMapper;
 import ir.omidashouri.mobileappws.models.dto.UserDto;
 import ir.omidashouri.mobileappws.models.request.RequestOperationName;
 import ir.omidashouri.mobileappws.models.request.RequestOperationStatus;
@@ -23,6 +24,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final UserDtoUserReqMapper userDtoUserReqMapper;
 
     // http://localhost:8080/users/v1/aLIRVt88hdQ858q5AMURm1QI6DC3Je
     // in header add Accept : application/xml or application/json
@@ -73,7 +75,8 @@ public class UserController {
 
         UserDto userDto = new UserDto();
 
-        BeanUtils.copyProperties(userDetails,userDto);
+//        BeanUtils.copyProperties(userDetails,userDto);
+        userDto = userDtoUserReqMapper.UserDetailsReqToUserDto(userDetails);
 
         UserDto createdUserDto = userService.createUserDto(userDto);
 
