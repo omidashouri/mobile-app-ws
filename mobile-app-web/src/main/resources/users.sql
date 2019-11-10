@@ -15,3 +15,31 @@ INSERT INTO photo_app.tbl_user
      '$2a$10$6gsSBzIaSKGcCO195NUk6eHdZs2owSe6pZ384WplZsGDil3fOzrCK','omid2','ashouri2',
      'XKch1CblSMJUsgUwHf3gX27revOsFB')
     ;
+
+INSERT INTO photo_app.tbl_address
+    (address_id,user_id,country,city,street_address)
+    VALUES
+    ('?','1','IRAN','Tehran',
+     '123 ABC Street')
+     ,
+    ('?','1','IRAN','Tehran',
+     '456 DEF Street')
+     ,
+    ('?','2','GILAN','Rasht',
+     '123 ABC Street'
+     )
+     ,
+    ('?','2','GILAN','Rasht',
+     '456 DEF Street'
+    )
+    ,
+    ('?','3','KHORASAN','Mashhad',
+     '123 ABC Street'
+     )
+     ,
+    ('?','3','KHORASAN','Mashhad',
+     '456 DEF Street'
+    )
+    ;
+
+
