@@ -15,5 +15,5 @@ public interface UserRepository extends PagingAndSortingRepository<User,Long> {
 //  use FIND to select record
 //  use BY to specify which field
 //  then specify the field name
-    User findUserByUserId(String userId);
+    User findUserByUserPublicId(String userPublicId);
 }

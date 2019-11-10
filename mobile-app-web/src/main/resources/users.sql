@@ -1,7 +1,7 @@
 INSERT INTO photo_app.tbl_user
     (email,email_verification_status,email_verification_token,
      encrypted_password,first_name,last_name,
-     user_id
+     user_public_id
 --       , address_id
      )
      VALUES

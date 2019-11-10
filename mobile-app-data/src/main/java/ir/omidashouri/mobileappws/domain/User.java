@@ -1,5 +1,6 @@
 package ir.omidashouri.mobileappws.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +17,8 @@ import java.util.List;
 @Table(name = "TBL_USER",schema = "photo_app")
 public class User extends BaseEntity {
 
-    @Column(name= "USER_ID",nullable = false,unique = true)
-    private String userId;
+    @Column(name= "USER_PUBLIC_ID",nullable = false,unique = true)
+    private String userPublicId;
 
     @Column(name= "FIRST_NAME",length = 50)
     private String firstName;
@@ -37,6 +38,7 @@ public class User extends BaseEntity {
     @Column(name = "EMAIL_VERIFICATION_STATUS")
     private Boolean emailVerificationStatus = false;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "userId",cascade = CascadeType.ALL)
     private List<Address> addresses;
 

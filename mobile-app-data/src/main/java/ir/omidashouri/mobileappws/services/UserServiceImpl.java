@@ -34,25 +34,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUserDto(UserDto userDto) {
 
-        User receivedUser = userRepository.findUserByUserId(userDto.getUserId());
+        User receivedUser = userRepository.findUserByUserPublicId(userDto.getUserPublicId());
 
         if (receivedUser != null) {
             throw new RuntimeException("user is duplicate");
         }
 
-        for(AddressDto addressDto : userDto.getAddresses()){
-            int i=0;
+//        for(AddressDto addressDto : userDto.getAddresses()){
+//        int i=0;
+         for(int i=0;i<userDto.getAddresses().size();i++){
+             AddressDto addressDto = userDto.getAddresses().get(i);
             addressDto.setUserDetails(userDto);
-            addressDto.setAddressId(utils.generateAddressId(30));
+            addressDto.setAddressPublicId(utils.generateAddressId(30));
             userDto.getAddresses().set(i,addressDto);
-            i++;
+//            i++;
         }
 
         User newUser = userMapper.UserDtoToUser(userDto);
         newUser.setEncryptedPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
 
         String userId = utils.generateUserId(30);
-        newUser.setUserId(userId);
+        newUser.setUserPublicId(userId);
 
         User savedUser = userRepository.save(newUser);
         return userMapper.UserToUserDto(savedUser);
@@ -84,7 +86,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserByUserPublicId(String userPublicId) {
         UserDto returnedUser = new UserDto();
 
-        User userDomain = userRepository.findUserByUserId(userPublicId);
+        User userDomain = userRepository.findUserByUserPublicId(userPublicId);
 
         if (userDomain == null) {
             throw new UsernameNotFoundException("user public id not found for " + userPublicId);
@@ -100,7 +102,7 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUserDto(String publicUserId, UserDto userDto) {
         UserDto returnedUser = new UserDto();
 
-        User userDomain = userRepository.findUserByUserId(publicUserId);
+        User userDomain = userRepository.findUserByUserPublicId(publicUserId);
 
         if (userDomain == null) {
             throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage() + publicUserId);
@@ -121,7 +123,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserDto(String publicUserId) {
 
-        User userDomain = userRepository.findUserByUserId(publicUserId);
+        User userDomain = userRepository.findUserByUserPublicId(publicUserId);
 
         if (userDomain == null) {
             throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage() + publicUserId);

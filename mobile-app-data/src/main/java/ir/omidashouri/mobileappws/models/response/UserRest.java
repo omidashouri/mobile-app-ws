@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserRest {
 
-    private String userId;
+    private String userPublicId;
     private String firstName;
     private String lastName;
     private String email;

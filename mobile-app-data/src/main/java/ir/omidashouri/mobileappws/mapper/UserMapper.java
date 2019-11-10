@@ -14,7 +14,7 @@ public interface UserMapper {
 
     @Mappings({
             @Mapping(source = "id",target = "id"),
-            @Mapping(source = "userId",target = "userId"),
+            @Mapping(source = "userPublicId",target = "userPublicId"),
             @Mapping(source = "firstName",target = "firstName"),
             @Mapping(source = "lastName",target = "lastName"),
             @Mapping(source = "email",target = "email"),
@@ -27,7 +27,7 @@ public interface UserMapper {
 
     @Mappings({
             @Mapping(source = "id",target = "id"),
-            @Mapping(source = "userId",target = "userId"),
+            @Mapping(source = "userPublicId",target = "userPublicId"),
             @Mapping(source = "firstName",target = "firstName"),
             @Mapping(source = "lastName",target = "lastName"),
             @Mapping(source = "email",target = "email"),

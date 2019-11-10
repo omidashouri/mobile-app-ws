@@ -14,7 +14,7 @@ public interface AddressMapper {
 
     @Mappings({
             @Mapping(source = "id",target = "id"),
-            @Mapping(source = "addressId",target = "addressId"),
+            @Mapping(source = "addressPublicId",target = "addressPublicId"),
             @Mapping(source = "city",target = "city"),
             @Mapping(source = "country",target = "country"),
             @Mapping(source = "streetName",target = "streetName"),
@@ -26,7 +26,7 @@ public interface AddressMapper {
 
     @Mappings({
             @Mapping(source = "id",target = "id"),
-            @Mapping(source = "addressId",target = "addressId"),
+            @Mapping(source = "addressPublicId",target = "addressPublicId"),
             @Mapping(source = "city",target = "city"),
             @Mapping(source = "country",target = "country"),
             @Mapping(source = "streetName",target = "streetName"),

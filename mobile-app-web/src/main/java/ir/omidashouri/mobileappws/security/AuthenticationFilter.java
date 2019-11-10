@@ -84,7 +84,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
 
 //    add public user id to response header
-        res.addHeader("UserID", userDto.getUserId());
+        res.addHeader("UserID", userDto.getUserPublicId());
 
     }
 
