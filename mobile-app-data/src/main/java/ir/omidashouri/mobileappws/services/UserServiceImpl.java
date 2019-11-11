@@ -9,6 +9,7 @@ import ir.omidashouri.mobileappws.models.response.ErrorMessages;
 import ir.omidashouri.mobileappws.repositories.UserRepository;
 import ir.omidashouri.mobileappws.utilities.Utils;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -44,19 +45,23 @@ public class UserServiceImpl implements UserService {
 //        int i=0;
          for(int i=0;i<userDto.getAddresses().size();i++){
              AddressDto addressDto = userDto.getAddresses().get(i);
-            addressDto.setUserDetails(userDto);
+            addressDto.setUserId(userDto);
             addressDto.setAddressPublicId(utils.generateAddressId(30));
             userDto.getAddresses().set(i,addressDto);
 //            i++;
         }
 
-        User newUser = userMapper.UserDtoToUser(userDto);
-        newUser.setEncryptedPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+//         Mapper donot work any more because we add user model to address and it cause loopback
+//        User newUser = userMapper.UserDtoToUser(userDto);
 
-        String userId = utils.generateUserId(30);
-        newUser.setUserPublicId(userId);
+        ModelMapper modelMapper = new ModelMapper();
+
+        User newUser = modelMapper.map(userDto,User.class);
+        newUser.setEncryptedPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+        newUser.setUserPublicId(utils.generateUserId(30));
 
         User savedUser = userRepository.save(newUser);
+//        change it to modelmapper
         return userMapper.UserToUserDto(savedUser);
     }
 

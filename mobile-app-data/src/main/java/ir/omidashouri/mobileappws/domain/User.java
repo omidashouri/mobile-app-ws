@@ -1,9 +1,6 @@
 package ir.omidashouri.mobileappws.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,6 +9,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(name = "TBL_USER",schema = "photo_app")
 public class User extends BaseEntity {
@@ -38,7 +36,8 @@ public class User extends BaseEntity {
     private Boolean emailVerificationStatus = false;
 
 //    @JsonManagedReference
-    @OneToMany(mappedBy = "userId",cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude  //for solving recursive error
+    @OneToMany(mappedBy = "userId",cascade = CascadeType.ALL)   //with cascade when save user the address information also saved
     private List<Address> addresses;
 
 }

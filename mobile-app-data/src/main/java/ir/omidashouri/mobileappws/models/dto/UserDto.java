@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.List;
@@ -45,10 +44,7 @@ public class UserDto implements Serializable {
     private Boolean emailVerificationStatus = false;
 
 //    @JsonManagedReference
-
-//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "userDetails")
-//    use @ToString.Exclude when using @Data lombok cause loopback
-    @ToString.Exclude
+//    @ToString.Exclude
     @JsonProperty("addresses")
     private List<AddressDto> addresses;
 

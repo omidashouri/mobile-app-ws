@@ -36,12 +36,8 @@ public class AddressDto implements Serializable {
     private String type;
 
 //    @JsonBackReference
-
-/*    @ManyToOne
-    @JoinColumn(name = "userDtoId")*/
-//    use @ToString.Exclude when using @Data lombok cause loopback
-    @ToString.Exclude
+    @ToString.Exclude   //for solving recursive error
     @JsonProperty("user_details")
-    private UserDto userDetails;
+    private UserDto userId;
 
 }

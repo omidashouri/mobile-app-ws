@@ -1,9 +1,6 @@
 package ir.omidashouri.mobileappws.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,6 +8,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(name = "TBL_ADDRESS",schema = "photo_app")
 public class Address extends BaseEntity {
@@ -39,6 +37,8 @@ public class Address extends BaseEntity {
     @Column(name= "TYPE",length = 10)
     private String type;
 
+    @EqualsAndHashCode.Exclude  //for solving recursive error
+    @ToString.Exclude   //for solving recursive error
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User userId;
