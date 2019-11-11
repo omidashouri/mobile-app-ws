@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
 //        int i=0;
          for(int i=0;i<userDto.getAddresses().size();i++){
              AddressDto addressDto = userDto.getAddresses().get(i);
-            addressDto.setUserId(userDto);
+            addressDto.setUser(userDto);
             addressDto.setAddressPublicId(utils.generateAddressId(30));
             userDto.getAddresses().set(i,addressDto);
 //            i++;
@@ -61,8 +61,8 @@ public class UserServiceImpl implements UserService {
         newUser.setUserPublicId(utils.generateUserId(30));
 
         User savedUser = userRepository.save(newUser);
-//        change it to modelmapper
-        return userMapper.UserToUserDto(savedUser);
+
+        return modelMapper.map(newUser,UserDto.class);
     }
 
     //    add public user id to response header

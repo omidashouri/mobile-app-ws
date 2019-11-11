@@ -21,7 +21,9 @@ public interface AddressMapper {
             @Mapping(source = "streetName",target = "streetName"),
             @Mapping(source = "postalCode",target = "postalCode"),
             @Mapping(source = "type",target = "type"),
-            @Mapping(source = "userId",target = "userId")
+            @Mapping(source = "user",target = "user"),
+            @Mapping(source = "userId",target = "user.id")
+
     })
     Address AddressDtoToAddress(AddressDto addressDto);
 

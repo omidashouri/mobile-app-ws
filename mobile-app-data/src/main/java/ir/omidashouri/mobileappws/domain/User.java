@@ -37,7 +37,7 @@ public class User extends BaseEntity {
 
 //    @JsonManagedReference
     @EqualsAndHashCode.Exclude  //for solving recursive error
-    @OneToMany(mappedBy = "userId",cascade = CascadeType.ALL)   //with cascade when save user the address information also saved
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)   //with cascade when save user the address information also saved
     private List<Address> addresses;
 
 }

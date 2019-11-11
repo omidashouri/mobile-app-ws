@@ -41,7 +41,7 @@ public class Address extends BaseEntity {
     @ToString.Exclude   //for solving recursive error
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-    private User userId;
+    private User user;
 
 
 }

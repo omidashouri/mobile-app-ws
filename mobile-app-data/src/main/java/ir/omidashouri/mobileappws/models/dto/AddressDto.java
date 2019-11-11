@@ -38,6 +38,8 @@ public class AddressDto implements Serializable {
 //    @JsonBackReference
     @ToString.Exclude   //for solving recursive error
     @JsonProperty("user_details")
-    private UserDto userId;
+    private UserDto user;
+
+    private Long userId;
 
 }
