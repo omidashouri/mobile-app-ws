@@ -11,6 +11,7 @@ import ir.omidashouri.mobileappws.models.response.OperationStatusModel;
 import ir.omidashouri.mobileappws.models.response.UserRest;
 import ir.omidashouri.mobileappws.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -81,8 +82,10 @@ public class UserController {
         UserDto createdUserDto = userService.createUserDto(userDto);
 
 //omiddo: change it later with mapper
-        BeanUtils.copyProperties(createdUserDto,returnValue);
+//        BeanUtils.copyProperties(createdUserDto,returnValue);
 
+        ModelMapper modelMapper = new ModelMapper();
+        returnValue = modelMapper.map(createdUserDto,UserRest.class);
         return returnValue;
     }
 
