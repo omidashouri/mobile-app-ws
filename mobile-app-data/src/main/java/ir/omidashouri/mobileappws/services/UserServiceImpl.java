@@ -98,7 +98,6 @@ public class UserServiceImpl implements UserService {
         }
 
         returnedUser = userMapper.UserToUserDto(userDomain);
-
         return returnedUser;
 
     }

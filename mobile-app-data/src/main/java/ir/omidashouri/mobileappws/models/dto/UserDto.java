@@ -1,9 +1,8 @@
 package ir.omidashouri.mobileappws.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -44,7 +43,9 @@ public class UserDto implements Serializable {
     private Boolean emailVerificationStatus = false;
 
 //    @JsonManagedReference
-//    @ToString.Exclude
+    @JsonIgnoreProperties("user")
+    @EqualsAndHashCode.Exclude  //for solving recursive error
+    @ToString.Exclude
     @JsonProperty("addresses")
     private List<AddressDto> addresses;
 

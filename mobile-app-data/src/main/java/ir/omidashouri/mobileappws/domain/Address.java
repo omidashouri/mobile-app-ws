@@ -37,8 +37,9 @@ public class Address extends BaseEntity {
     @Column(name= "TYPE",length = 10)
     private String type;
 
+    @Getter(AccessLevel.NONE)   //for solving recursive error (very important)
     @EqualsAndHashCode.Exclude  //for solving recursive error
-    @ToString.Exclude   //for solving recursive error
+    @ToString.Exclude   //for solving recursive error (serializable cause loopback)
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;

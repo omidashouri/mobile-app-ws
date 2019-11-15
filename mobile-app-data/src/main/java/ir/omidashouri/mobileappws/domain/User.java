@@ -3,6 +3,7 @@ package ir.omidashouri.mobileappws.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -35,9 +36,9 @@ public class User extends BaseEntity {
     @Column(name = "EMAIL_VERIFICATION_STATUS")
     private Boolean emailVerificationStatus = false;
 
-//    @JsonManagedReference
     @EqualsAndHashCode.Exclude  //for solving recursive error
+    @ToString.Exclude   //for solving recursive error
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)   //with cascade when save user the address information also saved
-    private List<Address> addresses;
+    private List<Address> addresses= new ArrayList<>();
 
 }

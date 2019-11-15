@@ -1,5 +1,7 @@
 package ir.omidashouri.mobileappws.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +10,8 @@ import lombok.ToString;
 
 import java.io.Serializable;
 
+
+@JsonInclude(JsonInclude.Include.NON_NULL) //remove null objects in response to client
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,10 +40,9 @@ public class AddressDto implements Serializable {
     private String type;
 
 //    @JsonBackReference
+    @JsonIgnoreProperties("addresses")
     @ToString.Exclude   //for solving recursive error
     @JsonProperty("user_details")
     private UserDto user;
-
-    private Long userId;
 
 }

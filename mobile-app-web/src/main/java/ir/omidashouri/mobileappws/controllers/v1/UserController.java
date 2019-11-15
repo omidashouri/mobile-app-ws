@@ -1,14 +1,18 @@
 package ir.omidashouri.mobileappws.controllers.v1;
 
 import ir.omidashouri.mobileappws.exceptions.UserServiceException;
+import ir.omidashouri.mobileappws.mapper.AddressRestMapper;
 import ir.omidashouri.mobileappws.mapper.UserDtoUserReqMapper;
+import ir.omidashouri.mobileappws.models.dto.AddressDto;
 import ir.omidashouri.mobileappws.models.dto.UserDto;
 import ir.omidashouri.mobileappws.models.request.RequestOperationName;
 import ir.omidashouri.mobileappws.models.request.RequestOperationStatus;
 import ir.omidashouri.mobileappws.models.request.UserDetailsRequestModel;
+import ir.omidashouri.mobileappws.models.response.AddressRest;
 import ir.omidashouri.mobileappws.models.response.ErrorMessages;
 import ir.omidashouri.mobileappws.models.response.OperationStatusModel;
 import ir.omidashouri.mobileappws.models.response.UserRest;
+import ir.omidashouri.mobileappws.services.AddressService;
 import ir.omidashouri.mobileappws.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -25,7 +29,9 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final AddressService addressService;
     private final UserDtoUserReqMapper userDtoUserReqMapper;
+    private final AddressRestMapper addressRestMapper;
 
     // http://localhost:8080/users/v1/aLIRVt88hdQ858q5AMURm1QI6DC3Je
     // in header add Accept : application/xml or application/json
@@ -116,6 +122,36 @@ public class UserController {
 
         operationStatusModel.setOperationResult(RequestOperationStatus.SUCCESS.name());
         return operationStatusModel;
+    }
+
+    @GetMapping(path = "/{userPublicId}/addresses",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public List<AddressRest> getUserAddresses(@PathVariable String userPublicId){
+
+        List<AddressDto> addressDtoes = addressService.getAddressDtosByUserPublicId(userPublicId);
+
+        List<AddressRest> addressRestList = new ArrayList<>();
+
+        if(addressDtoes != null && !addressDtoes.isEmpty()){
+            addressRestList = addressRestMapper.AddressDtoesToAddressRests(addressDtoes);
+        }
+
+        return addressRestList;
+    }
+
+    @GetMapping(path = "/{userPublicId}/addresses/{addressPublicId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public AddressRest getUserAddress(@PathVariable String addressPublicId){
+
+        AddressDto addressDto = addressService.getAddressDtoByAddressPublicId(addressPublicId);
+
+        AddressRest addressRest = new AddressRest();
+
+        if(addressDto != null){
+            addressRest = addressRestMapper.AddressDtoToAddressRest(addressDto);
+        }
+
+        return addressRest;
     }
 
 }

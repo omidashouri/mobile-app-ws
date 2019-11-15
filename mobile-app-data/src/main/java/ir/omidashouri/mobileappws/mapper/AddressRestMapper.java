@@ -1,47 +1,49 @@
 package ir.omidashouri.mobileappws.mapper;
 
-import ir.omidashouri.mobileappws.domain.Address;
 import ir.omidashouri.mobileappws.models.dto.AddressDto;
+import ir.omidashouri.mobileappws.models.response.AddressRest;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
-public interface AddressMapper {
+import java.util.List;
 
-    AddressMapper INSTANCE = Mappers.getMapper(AddressMapper.class);
+//AddressRest and AddressDto
+@Mapper
+public interface AddressRestMapper {
+
+    AddressRestMapper INSTANCE = Mappers.getMapper(AddressRestMapper.class);
 
     @Mappings({
-            @Mapping(source = "id",target = "id"),
             @Mapping(source = "addressPublicId",target = "addressPublicId"),
             @Mapping(source = "city",target = "city"),
             @Mapping(source = "country",target = "country"),
             @Mapping(source = "streetName",target = "streetName"),
             @Mapping(source = "postalCode",target = "postalCode"),
             @Mapping(source = "type",target = "type")
-//            ,
-//            @Mapping(source = "user",target = "user"),
-//            @Mapping(source = "userId",target = "user.id")
-
     })
-    Address AddressDtoToAddress(AddressDto addressDto);
+    AddressRest AddressDtoToAddressRest(AddressDto addressDto);
 
     @InheritInverseConfiguration
-    AddressDto AddressToAddressDto(Address address);
+    AddressDto AddressRestToAddressDto(AddressRest addressRest);
 
+    default AddressRest fromPublicId(final String publicId) {
 
-/*    default Address fromId(final Long id) {
-
-        if (id == null) {
+        if (publicId == null) {
             return null;
         }
 
-        final Address address=new Address();
-        address.setId(id);
+        final AddressRest addressRest=new AddressRest();
+        addressRest.setAddressPublicId(publicId);
 
-        return address;
-    }*/
+        return addressRest;
+    }
+
+
+    List<AddressDto> AddressRestsToAddressDtoes(List<AddressRest> addressRests);
+
+    List<AddressRest> AddressDtoesToAddressRests(List<AddressDto> addressDtoes);
 
 }
