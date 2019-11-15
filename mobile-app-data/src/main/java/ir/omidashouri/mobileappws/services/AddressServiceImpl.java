@@ -12,11 +12,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
-
+    // important: we should have only one mapper
     private final AddressMapper addressMapper;
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
@@ -31,19 +32,11 @@ public class AddressServiceImpl implements AddressService {
         if (user == null) {
             return returnValue;
         }
-//omiddo: correct it later
-        addressRepository.findAllByUser(user)
-                .stream()
-                .forEach(e -> {
-                    AddressDto addressDto = new AddressDto();
-                    addressDto = modelMapper.map(e, AddressDto.class);
-                    returnValue.add(addressDto);
-                });
 
-/*        addressRepository.findAllByUser(user)
+        returnValue = addressRepository.findAllByUser(user)
                 .stream()
                 .map(addressMapper::AddressToAddressDto)
-                .map(returnValue::add);*/
+                .collect(Collectors.toList());
 
         return returnValue;
     }
