@@ -26,4 +26,10 @@ public class BaseEntity implements Serializable {
     public boolean isNew() {
         return this.id == null;
     }
+
+//    if we want to have timestamp, also should add JSR dependency to maven
+//    and define class to spring boot
+/*    @CreationTimestamp
+    @Column(updatable = false)
+    protected Instant created;*/
 }

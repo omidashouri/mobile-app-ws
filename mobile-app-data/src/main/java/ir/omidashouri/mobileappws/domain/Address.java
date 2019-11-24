@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
+//@JsonPropertyOrder({"addressPublicId"}) //specify order by our will
 @Getter
 @Setter
 @NoArgsConstructor
@@ -37,6 +38,7 @@ public class Address extends BaseEntity {
     @Column(name= "TYPE",length = 10)
     private String type;
 
+    //    @RestResource(exported=false) //when using rest and want to display entity instead link
     @Getter(AccessLevel.NONE)   //for solving recursive error (very important)
     @EqualsAndHashCode.Exclude  //for solving recursive error
     @ToString.Exclude   //for solving recursive error (serializable cause loopback)
