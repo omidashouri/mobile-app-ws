@@ -1,5 +1,6 @@
 package ir.omidashouri.mobileappws.configurations;
 
+import ir.omidashouri.mobileappws.utilities.ErpPasswordEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +12,11 @@ public class AppConfig {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public ErpPasswordEncoder erpPasswordEncoder(){
+        return new ErpPasswordEncoder();
     }
 
 //    add this to have access to make it available for application context

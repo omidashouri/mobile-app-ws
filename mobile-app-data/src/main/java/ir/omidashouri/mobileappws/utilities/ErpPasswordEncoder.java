@@ -1,4 +1,11 @@
-/*public class ErpPasswordEncoder implements PasswordEncoder {
+package ir.omidashouri.mobileappws.utilities;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+
+public class ErpPasswordEncoder implements PasswordEncoder {
 
     private final ERPMDF erpMdf;
 
@@ -29,4 +36,4 @@
         else
             return false;
     }
-}*/
+}
