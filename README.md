@@ -81,3 +81,57 @@ Spring RESTful Web Services, Java, Spring Boot, Spring MVC and JPA
 					}
 				]
 }
+
+-----------------------
+
+Spring Hateoas 1.0:
+
+    changes:
+        ResourceSupport -is now> RepresentationModel
+        Resource -is now> EntityModel
+        Resources -is now> CollectionModel
+        PagedResources -is now> PagedModel
+        
+    RepresentationModel:
+        EntityModel -|> RepresentationModel
+        CollectionModel -|> RepresentationModel
+        PagedModel -|> CollectionModel
+
+-----------------------
+
+CONTROLLER:  public AddressRest getUserAddress
+
+
+
+POST: http://localhost:8080/v1/users
+
+{
+        "firstName":"omid3",
+        "lastName":"ashouri3",
+        "email":"omidashouri3@gmail.com",
+        "password":"123",
+        "addresses":[
+					{
+					"city":"vancover",
+					"country":"canada",
+					"streetName":"",
+					"postalCode":"123456",
+					"type":"billing"
+					},{
+					"city":"vancover1",
+					"country":"canada1",
+					"streetName":"",
+					"postalCode":"56789",
+					"type":"billing1"
+					}
+				]
+}
+
+GET: http://localhost:8080/v1/users
+
+pick publicUserId and publicAddressId then add it to bellow
+
+GET: http://localhost:8080/v1/users/UAQAp4oxwUfW9K3GrgsYIcSwCL3Pvv/addresses/RdImtQIi98IJvJGB9BZkCQjS9ovgsE
+
+-----------------------
+

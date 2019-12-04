@@ -17,6 +17,8 @@ import ir.omidashouri.mobileappws.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.ControllerLinkBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +35,7 @@ public class UserController {
     private final UserDtoUserReqMapper userDtoUserReqMapper;
     private final AddressRestMapper addressRestMapper;
 
-    // http://localhost:8080/users/v1/aLIRVt88hdQ858q5AMURm1QI6DC3Je
+    // http://localhost:8080/v1/users/aLIRVt88hdQ858q5AMURm1QI6DC3Je
     // in header add Accept : application/xml or application/json
     @GetMapping(path = "/{userPublicId}",
 //            make response as XML or JSON
@@ -124,6 +126,7 @@ public class UserController {
         return operationStatusModel;
     }
 
+//    http://localhost:8080/v1/users/SvWcmm8yptgOAS7Cw5QtDpdDjVVXfd/addresses
     @GetMapping(path = "/{userPublicId}/addresses",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public List<AddressRest> getUserAddresses(@PathVariable String userPublicId){
@@ -139,9 +142,12 @@ public class UserController {
         return addressRestList;
     }
 
+//    http://localhost:8080/v1/users/SvWcmm8yptgOAS7Cw5QtDpdDjVVXfd/addresses/qpiYxzrBGE73250AwK1ui1sAkpkXFw
+//    first create omidashouri3 then replace new public userId and addressId
     @GetMapping(path = "/{userPublicId}/addresses/{addressPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public AddressRest getUserAddress(@PathVariable String addressPublicId){
+    public AddressRest getUserAddress(@PathVariable String addressPublicId,
+                                        @PathVariable String userPublicId){
 
         AddressDto addressDto = addressService.getAddressDtoByAddressPublicId(addressPublicId);
 
@@ -150,6 +156,15 @@ public class UserController {
         if(addressDto != null){
             addressRest = addressRestMapper.AddressDtoToAddressRest(addressDto);
         }
+
+        ModelMapper modelMapper = new ModelMapper();
+        Link addressLink = ControllerLinkBuilder.linkTo(UserController.class)
+                                .slash(userPublicId)
+                                .slash("addresses")
+                                .slash(addressPublicId)
+                .withSelfRel();
+
+        addressRest.add(addressLink);
 
         return addressRest;
     }
