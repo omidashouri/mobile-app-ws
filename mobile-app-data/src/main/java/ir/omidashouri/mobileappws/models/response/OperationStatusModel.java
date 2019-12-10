@@ -8,5 +8,5 @@ import lombok.Setter;
 public class OperationStatusModel {
 
     private String operationResult;
-    private String OperationName;
+    private String operationName;
 }

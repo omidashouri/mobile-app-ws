@@ -5,6 +5,7 @@ import ir.omidashouri.mobileappws.mapper.AddressRestMapper;
 import ir.omidashouri.mobileappws.mapper.UserDtoUserReqMapper;
 import ir.omidashouri.mobileappws.models.dto.AddressDto;
 import ir.omidashouri.mobileappws.models.dto.UserDto;
+import ir.omidashouri.mobileappws.models.request.PasswordResetRequestModel;
 import ir.omidashouri.mobileappws.models.request.RequestOperationName;
 import ir.omidashouri.mobileappws.models.request.RequestOperationStatus;
 import ir.omidashouri.mobileappws.models.request.UserDetailsRequestModel;
@@ -217,5 +218,28 @@ public class UserController {
 
         return new EntityModel<>(addressRest);
     }
+
+//    http://localhost:8080/v1/users/password-reset-request
+    @PostMapping(path = "/password-reset-request",
+                produces = {MediaType.APPLICATION_JSON_VALUE,
+                            MediaType.APPLICATION_XML_VALUE},
+                consumes = {MediaType.APPLICATION_JSON_VALUE,
+                            MediaType.APPLICATION_XML_VALUE})
+    public OperationStatusModel requestReset(@RequestBody PasswordResetRequestModel passwordResetRequestModel){
+        OperationStatusModel returnValue = new OperationStatusModel();
+
+        boolean operationResult  = userService.requestPasswordReset(passwordResetRequestModel.getEmail());
+
+            returnValue.setOperationName(RequestOperationName.REQUEST_PASSWORD_RESET.name());
+            returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+
+            if(operationResult)
+            {
+                returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+            }
+
+        return returnValue;
+    }
+
 
 }

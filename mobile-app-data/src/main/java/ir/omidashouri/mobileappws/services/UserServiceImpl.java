@@ -156,6 +156,53 @@ public class UserServiceImpl implements UserService {
         return userDtoList;
     }
 
+    @Override
+    public boolean verifyEmailToken(String token) {
+        boolean returnValue = false;
+
+/*        User user = userRepository.findUserByEmailVerificationToken(token);
+
+        if(user != null){
+            boolean hastokenExpired = Utils.hasTokenExpired(token);
+            if(!hastokenExpired)
+            {
+                user.setEmail(null);
+                user.setEmailVerificationToken(null);
+                user.setEmailVerificationStatus(Boolean.TRUE);
+                userRepository.save(user);
+                returnValue = true;
+            }
+        }*/
+
+        return returnValue;
+    }
+
+    @Override
+    public boolean requestPasswordReset(String email) {
+
+        boolean returnValue = false;
+        User user = userRepository.findByEmail(email);
+
+        if(user == null)
+            {
+                return returnValue;
+            }
+
+/*        String token = Utils.generatePasswordReset(user.getUserPublicId());
+
+        PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
+        passwordResetTokenEntity.setToken(token);
+        passwordResetTokenEntity.setUserDetails(passwordResetTokenEntity);
+        passwordResetTokenEntity.save(passwordResetTokenEntity);
+
+        returnValue = new AmazonSES().sendPasswordResetRequest(
+                user.getFirstName(),
+                user.getEmail(),
+                token);*/
+
+        return returnValue;
+    }
+
 
     //    implement from  interface UserDetailsService, which extend in our UserService interface
     //    email here is as a username filed
