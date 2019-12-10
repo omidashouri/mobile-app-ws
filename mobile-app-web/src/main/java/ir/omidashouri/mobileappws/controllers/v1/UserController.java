@@ -17,6 +17,8 @@ import ir.omidashouri.mobileappws.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.ControllerLinkBuilder;
 import org.springframework.http.MediaType;
@@ -26,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("v1/users")
+@RequestMapping("/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -127,9 +129,12 @@ public class UserController {
     }
 
 //    http://localhost:8080/v1/users/SvWcmm8yptgOAS7Cw5QtDpdDjVVXfd/addresses
+//    first create omidashouri3 then replace new public userId and addressId
+//    use CollectionModel for HAL, so embedded collection in response are also json (which here is address)
     @GetMapping(path = "/{userPublicId}/addresses",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public List<AddressRest> getUserAddresses(@PathVariable String userPublicId){
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
+                        "application/hal+json"})
+    public CollectionModel<AddressRest> getUserAddresses(@PathVariable String userPublicId){
 
         List<AddressDto> addressDtoes = addressService.getAddressDtosByUserPublicId(userPublicId);
 
@@ -139,15 +144,35 @@ public class UserController {
             addressRestList = addressRestMapper.AddressDtoesToAddressRests(addressDtoes);
         }
 
-        return addressRestList;
+        for(AddressRest addressRest : addressRestList)
+        {
+                Link addressLink = ControllerLinkBuilder
+                        .linkTo(ControllerLinkBuilder
+                                .methodOn(UserController.class)
+                                .getUserAddress(userPublicId,addressRest.getAddressPublicId()))
+                                .withSelfRel();
+
+                addressRest.add(addressLink);
+
+                Link userLink = ControllerLinkBuilder
+                                    .linkTo(ControllerLinkBuilder
+                                            .methodOn(UserController.class).getUser(userPublicId)).withRel("user");
+
+            addressRest.add(userLink);
+        }
+
+
+        return new CollectionModel<>(addressRestList);
     }
 
 //    http://localhost:8080/v1/users/SvWcmm8yptgOAS7Cw5QtDpdDjVVXfd/addresses/qpiYxzrBGE73250AwK1ui1sAkpkXFw
 //    first create omidashouri3 then replace new public userId and addressId
+//    use EntityModel for HAL, so embedded collection in response are also json
     @GetMapping(path = "/{userPublicId}/addresses/{addressPublicId}",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public AddressRest getUserAddress(@PathVariable String addressPublicId,
-                                        @PathVariable String userPublicId){
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
+                        "application/hal+json"})
+    public EntityModel<AddressRest> getUserAddress(@PathVariable String addressPublicId,
+                                                  @PathVariable String userPublicId){
 
         AddressDto addressDto = addressService.getAddressDtoByAddressPublicId(addressPublicId);
 
@@ -158,15 +183,39 @@ public class UserController {
         }
 
         ModelMapper modelMapper = new ModelMapper();
-        Link addressLink = ControllerLinkBuilder.linkTo(UserController.class)
+
+//        old
+/*        Link addressLink = ControllerLinkBuilder.linkTo(UserController.class)
                                 .slash(userPublicId)
                                 .slash("addresses")
                                 .slash(addressPublicId)
-                .withSelfRel();
+                                .withSelfRel();    */
+
+        Link addressLink = ControllerLinkBuilder
+                            .linkTo(ControllerLinkBuilder
+                                    .methodOn(UserController.class)
+                                                .getUserAddress(userPublicId,addressPublicId))
+                                    .withSelfRel();
+
+        Link userLink = ControllerLinkBuilder.linkTo(UserController.class)
+                                .slash(userPublicId)
+                                .withRel("user");
+//        old
+/*        Link addressesLink = ControllerLinkBuilder.linkTo(UserController.class)
+                .slash(userPublicId)
+                .slash("addresses")
+                .withRel("addresses");  */
+
+        Link addressesLink = ControllerLinkBuilder
+                                .linkTo(ControllerLinkBuilder
+                                        .methodOn(UserController.class).getUserAddresses(userPublicId))
+                                .withRel("addresses");
 
         addressRest.add(addressLink);
+        addressRest.add(userLink);
+        addressRest.add(addressesLink);
 
-        return addressRest;
+        return new EntityModel<>(addressRest);
     }
 
 }
