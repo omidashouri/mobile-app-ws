@@ -160,7 +160,7 @@ public class UserServiceImpl implements UserService {
     public boolean verifyEmailToken(String token) {
         boolean returnValue = false;
 
-/*        User user = userRepository.findUserByEmailVerificationToken(token);
+        User user = userRepository.findUserByEmailVerificationToken(token);
 
         if(user != null){
             boolean hastokenExpired = Utils.hasTokenExpired(token);
@@ -172,7 +172,7 @@ public class UserServiceImpl implements UserService {
                 userRepository.save(user);
                 returnValue = true;
             }
-        }*/
+        }
 
         return returnValue;
     }

@@ -16,4 +16,6 @@ public interface UserRepository extends PagingAndSortingRepository<User,Long> {
 //  use BY to specify which field
 //  then specify the field name
     User findUserByUserPublicId(String userPublicId);
+
+    User findUserByEmailVerificationToken(String token);
 }
