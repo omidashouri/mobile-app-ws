@@ -2,6 +2,7 @@ package ir.omidashouri.mobileappws.utilities;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import ir.omidashouri.mobileappws.security.SecurityConstants;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +38,7 @@ public class Utils {
 
     /*
      * check for email verification token expiration time
+     * and decrypt it which is created in 'generateEmailVerificationToken' method.
      */
     public static boolean hasTokenExpired(String token){
 
@@ -55,4 +57,18 @@ public class Utils {
 //        compare two date and if true return expired(false)
         return tokenExpirationDate.before(todayDate);
     }
+
+    /**
+     * create email verification token in create user and forget email
+     */
+   public static String generateEmailVerificationToken(String publicUserId){
+        String token = Jwts.builder()
+                            .setSubject(publicUserId)
+//                expiration time is now plus ten days from today
+                            .setExpiration(new Date(System.currentTimeMillis()+SecurityConstants.EXPIRATION_TIME))
+//                then sign it with security algorithm and our own security constant
+                            .signWith(SignatureAlgorithm.ES512,SecurityConstants.getTokenSecret())
+                            .compact();
+        return token;
+   }
 }

@@ -59,7 +59,10 @@ public class UserServiceImpl implements UserService {
 
         User newUser = modelMapper.map(userDto,User.class);
         newUser.setEncryptedPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
-        newUser.setUserPublicId(utils.generateUserId(30));
+        String publicUserId = utils.generateUserId(30);
+        newUser.setUserPublicId(publicUserId);
+        newUser.setEmailVerificationToken(utils.generateEmailVerificationToken(publicUserId));
+        newUser.setEmailVerificationStatus(false);
 
         User savedUser = userRepository.save(newUser);
 

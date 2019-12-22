@@ -46,7 +46,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                     .readValue(req.getInputStream(), UserLoginRequestModel.class);
 
 //            use the method we implement in our service to identify user
-
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             creds.getEmail(),
