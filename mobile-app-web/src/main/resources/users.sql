@@ -5,7 +5,7 @@ INSERT INTO photo_app.tbl_user
 --       , address_id
      )
      VALUES
-     ('omidashouri@gmail.com',0,NULL,
+     ('omidashouri@gmail.com',1,NULL,
       '202cb962ac59075b964b07152d234b70','omid','ashouri',
       'aLIRVt88hdQ858q5AMURm1QI6DC3Je'
 --        ,NULL
@@ -54,3 +54,21 @@ INSERT INTO photo_app.tbl_user
     ;*/
 
 
+/*
+Hibernate: insert into tbl_user
+    (email, email_verification_status, email_verification_token,
+        encrypted_password, first_name, last_name, user_public_id)
+    values (?, ?, ?,
+            ?, ?, ?, ?)
+Hibernate: insert into tbl_address
+    (address_public_id, city, country,
+        postal_code, street_name, type, user_id)
+    values (?, ?, ?,
+            ?, ?, ?, ?)
+Hibernate: insert into tbl_address
+    (address_public_id, city, country,
+        postal_code, street_name, type, user_id)
+    values (?, ?, ?,
+            ?, ?, ?, ?)
+
+ */

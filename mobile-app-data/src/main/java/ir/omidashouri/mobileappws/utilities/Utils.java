@@ -67,7 +67,7 @@ public class Utils {
 //                expiration time is now plus ten days from today
                             .setExpiration(new Date(System.currentTimeMillis()+SecurityConstants.EXPIRATION_TIME))
 //                then sign it with security algorithm and our own security constant
-                            .signWith(SignatureAlgorithm.ES512,SecurityConstants.getTokenSecret())
+                            .signWith(SignatureAlgorithm.HS512,SecurityConstants.getTokenSecret())
                             .compact();
         return token;
    }

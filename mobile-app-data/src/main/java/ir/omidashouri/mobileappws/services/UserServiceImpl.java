@@ -208,7 +208,7 @@ public class UserServiceImpl implements UserService {
 
 
     //    implement from  interface UserDetailsService, which extend in our UserService interface
-    //    email here is as a username filed
+    //    email here is as a username filed, use for let user login
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
@@ -220,8 +220,20 @@ public class UserServiceImpl implements UserService {
 
         User user = users.get(0);
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail()
+//        let user to login without checking email verification, empty array list is for granted authorities
+/*        return new org.springframework.security.core.userdetails.User(user.getEmail()
                 , user.getEncryptedPassword()
-                , new ArrayList<>());
+                , new ArrayList<>());*/
+
+//        let user login if user email is verified
+        return new org.springframework.security.core.userdetails.User(user.getEmail(),
+                user.getEncryptedPassword(),
+                user.getEmailVerificationStatus(),
+                true,
+                true,
+                true,
+                new ArrayList<>());
+
+
     }
 }
