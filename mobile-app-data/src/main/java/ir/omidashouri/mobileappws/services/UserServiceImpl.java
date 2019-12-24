@@ -183,31 +183,7 @@ public class UserServiceImpl implements UserService {
         return returnValue;
     }
 
-    @Override
-    public boolean requestPasswordReset(String email) {
 
-        boolean returnValue = false;
-        User user = userRepository.findByEmail(email);
-
-        if(user == null)
-            {
-                return returnValue;
-            }
-
-/*        String token = Utils.generatePasswordReset(user.getUserPublicId());
-
-        PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
-        passwordResetTokenEntity.setToken(token);
-        passwordResetTokenEntity.setUserDetails(passwordResetTokenEntity);
-        passwordResetTokenEntity.save(passwordResetTokenEntity);
-
-        returnValue = new AmazonSES().sendPasswordResetRequest(
-                user.getFirstName(),
-                user.getEmail(),
-                token);*/
-
-        return returnValue;
-    }
 
 
     //    implement from  interface UserDetailsService, which extend in our UserService interface
@@ -238,5 +214,33 @@ public class UserServiceImpl implements UserService {
                 new ArrayList<>());
 
 
+    }
+
+
+
+    @Override
+    public boolean requestPasswordReset(String email) {
+
+        boolean returnValue = false;
+        User user = userRepository.findByEmail(email);
+
+        if(user == null)
+        {
+            return returnValue;
+        }
+
+        String token =  new Utils().generatePasswordResetToken(user.getUserPublicId());
+
+/*        PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
+        passwordResetTokenEntity.setToken(token);
+        passwordResetTokenEntity.setUserDetails(passwordResetTokenEntity);
+        passwordResetTokenRepository.save(passwordResetTokenEntity);
+
+        returnValue = new AmazonSES().sendPasswordResetRequest(
+                user.getFirstName(),
+                user.getEmail(),
+                token);*/
+
+        return returnValue;
     }
 }

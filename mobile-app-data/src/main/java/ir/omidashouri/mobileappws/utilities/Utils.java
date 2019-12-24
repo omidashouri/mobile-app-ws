@@ -71,4 +71,15 @@ public class Utils {
                             .compact();
         return token;
    }
+
+
+    public String generatePasswordResetToken(String publicUserId){
+       String token = Jwts.builder()
+               .setSubject(publicUserId)
+               .setExpiration(new Date(System.currentTimeMillis()+SecurityConstants.EXPIRATION_TIME))
+//               sign in to the token with the same email verification token
+               .signWith(SignatureAlgorithm.HS512,SecurityConstants.getTokenSecret())
+               .compact();
+       return token;
+    }
 }
