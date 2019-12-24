@@ -23,6 +23,7 @@ public class AmazonSES {
             " http://localhost:8080/v1/users/email-verification?token=$tokenValue " +
             "Thank you! And we are waiting for you inside!";
 
+//    use this method in 'UserServiceImpl' -> 'createUserDto' method
     public void verifyEmail(User userDomain){
 
         String htmlBodyWithToken = HTMLBODY.replace("$tokenValue",userDomain.getEmailVerificationToken());

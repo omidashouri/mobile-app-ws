@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(newUser);
 
 //        omiddo:send email verification to the user email address
+//        new AmazonSES().verifyEmail(savedUser);
 
         return modelMapper.map(newUser,UserDto.class);
     }
