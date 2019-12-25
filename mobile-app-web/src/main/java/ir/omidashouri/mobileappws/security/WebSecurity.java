@@ -24,11 +24,14 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.csrf().disable().authorizeRequests()
 
-//  specify which url do not need authentication
+//  specify which url do not need authentication (or they are public)
                 .antMatchers(HttpMethod.POST,SecurityConstants.SIGN_UP_URL)
                 .permitAll()
 
                 .antMatchers(HttpMethod.GET,SecurityConstants.VERIFICATION_EMAIL_URL)
+                .permitAll()
+
+                .antMatchers(HttpMethod.POST,SecurityConstants.PASSWORD_RESET_REQUEST_URL)
                 .permitAll()
 
 //  specify for all other url need authentication

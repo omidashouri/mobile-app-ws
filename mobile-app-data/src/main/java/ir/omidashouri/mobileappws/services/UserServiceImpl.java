@@ -1,11 +1,13 @@
 package ir.omidashouri.mobileappws.services;
 
+import ir.omidashouri.mobileappws.domain.PasswordResetTokenEntity;
 import ir.omidashouri.mobileappws.domain.User;
 import ir.omidashouri.mobileappws.exceptions.UserServiceException;
 import ir.omidashouri.mobileappws.mapper.UserMapper;
 import ir.omidashouri.mobileappws.models.dto.AddressDto;
 import ir.omidashouri.mobileappws.models.dto.UserDto;
 import ir.omidashouri.mobileappws.models.response.ErrorMessages;
+import ir.omidashouri.mobileappws.repositories.PasswordResetTokenRepository;
 import ir.omidashouri.mobileappws.repositories.UserRepository;
 import ir.omidashouri.mobileappws.utilities.ErpPasswordEncoder;
 import ir.omidashouri.mobileappws.utilities.Utils;
@@ -28,6 +30,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
     private final UserRepository userRepository;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final Utils utils;
 //    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ErpPasswordEncoder bCryptPasswordEncoder;
@@ -231,12 +234,12 @@ public class UserServiceImpl implements UserService {
 
         String token =  new Utils().generatePasswordResetToken(user.getUserPublicId());
 
-/*        PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
+        PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
         passwordResetTokenEntity.setToken(token);
-        passwordResetTokenEntity.setUserDetails(passwordResetTokenEntity);
+        passwordResetTokenEntity.setUser(user);
         passwordResetTokenRepository.save(passwordResetTokenEntity);
 
-        returnValue = new AmazonSES().sendPasswordResetRequest(
+/*        returnValue = new AmazonSES().sendPasswordResetRequest(
                 user.getFirstName(),
                 user.getEmail(),
                 token);*/
