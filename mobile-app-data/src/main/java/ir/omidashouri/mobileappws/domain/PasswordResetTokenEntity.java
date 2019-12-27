@@ -20,7 +20,7 @@ public class PasswordResetTokenEntity extends BaseEntity {
 
     private String token;
 
-    @Getter(AccessLevel.NONE)
+//    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToOne

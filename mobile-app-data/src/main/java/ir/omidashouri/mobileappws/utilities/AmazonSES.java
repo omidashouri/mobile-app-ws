@@ -66,7 +66,7 @@ public class AmazonSES {
 //    use this method in 'UserServiceImpl' -> 'createUserDto' method
     public boolean sendPasswordResetRequest(String firstName, String email, String token){
 
-        boolean returnvalue = false;
+        boolean returnValue = false;
 
 //        Amazon Class
 /*        AmazonSimpleEmailService client =
@@ -97,13 +97,13 @@ public class AmazonSES {
         SendEmailResult result = client.sendEmail(request);
         if(result != null && (result.getMessageId() != null && !result.getMessageId().isEmpty()))
         {
-            returnvalue = true;
+            returnValue = true;
         }*/
 
 //      suppose we had sent reset email
-        returnvalue = true;
+        returnValue = true;
 
-        return  returnvalue;
+        return  returnValue;
     }
 
 

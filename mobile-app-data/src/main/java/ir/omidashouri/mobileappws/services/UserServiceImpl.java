@@ -9,6 +9,7 @@ import ir.omidashouri.mobileappws.models.dto.UserDto;
 import ir.omidashouri.mobileappws.models.response.ErrorMessages;
 import ir.omidashouri.mobileappws.repositories.PasswordResetTokenRepository;
 import ir.omidashouri.mobileappws.repositories.UserRepository;
+import ir.omidashouri.mobileappws.utilities.AmazonSES;
 import ir.omidashouri.mobileappws.utilities.ErpPasswordEncoder;
 import ir.omidashouri.mobileappws.utilities.Utils;
 import lombok.RequiredArgsConstructor;
@@ -175,7 +176,7 @@ public class UserServiceImpl implements UserService {
             boolean hastokenExpired = Utils.hasTokenExpired(token);
             if(!hastokenExpired)
             {
-                user.setEmail(null);
+//                user.setEmail(null);
                 user.setEmailVerificationToken(null);
                 user.setEmailVerificationStatus(Boolean.TRUE);
                 userRepository.save(user);
@@ -239,10 +240,46 @@ public class UserServiceImpl implements UserService {
         passwordResetTokenEntity.setUser(user);
         passwordResetTokenRepository.save(passwordResetTokenEntity);
 
-/*        returnValue = new AmazonSES().sendPasswordResetRequest(
+        returnValue = new AmazonSES().sendPasswordResetRequest(
                 user.getFirstName(),
                 user.getEmail(),
-                token);*/
+                token);
+
+        return returnValue;
+    }
+
+    @Override
+    public boolean resetPassword(String token, String password) {
+        boolean returnValue = false;
+
+        if(Utils.hasTokenExpired(token)){
+            return returnValue;
+        }
+
+        PasswordResetTokenEntity passwordResetTokenEntity = passwordResetTokenRepository
+                                                                            .findByToken(token);
+        if(passwordResetTokenEntity == null){
+            return returnValue;
+        }
+
+//        prepare new password
+        String encodedPassword = bCryptPasswordEncoder.encode(password);
+
+//        update user password in database
+        User userEntity = passwordResetTokenEntity.getUser();
+        userEntity.setEncryptedPassword(encodedPassword);
+        User savedUserEntity = userRepository.save(userEntity);
+
+//        verify if password is saved correctly
+        if(savedUserEntity != null && savedUserEntity
+                                            .getEncryptedPassword()
+                                                .equalsIgnoreCase(encodedPassword)){
+            returnValue = true;
+        }
+
+// remove password reset token from database
+//        and user cannot use it twice
+        passwordResetTokenRepository.delete(passwordResetTokenEntity);
 
         return returnValue;
     }

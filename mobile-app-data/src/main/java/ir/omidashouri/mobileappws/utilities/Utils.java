@@ -39,6 +39,7 @@ public class Utils {
     /*
      * check for email verification token expiration time
      * and decrypt it which is created in 'generateEmailVerificationToken' method.
+     * and check token in reset password method expiration time
      */
     public static boolean hasTokenExpired(String token){
 

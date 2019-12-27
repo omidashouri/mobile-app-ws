@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PasswordResetTokenRepository extends PagingAndSortingRepository<PasswordResetTokenEntity,Long> {
+
+    PasswordResetTokenEntity findByToken(String token);
 }
