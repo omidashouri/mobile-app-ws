@@ -12,6 +12,7 @@ public class MobileAppWsApplicationTests {
 
     @Test
     public void contextLoads() {
+        System.out.println("Test Junit 5");
     }
 
 }

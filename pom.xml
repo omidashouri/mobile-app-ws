@@ -83,20 +83,6 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco-maven-plugin.version}</version>
-                <!--                <executions>
-                                    <execution>
-                                        <goals>
-                                            <goal>prepare-agent</goal>
-                                        </goals>
-                                    </execution>
-                                    &lt;!&ndash; attached to Maven test phase &ndash;&gt;
-                                    <execution>
-                                        <id>report</id>
-                                        <phase>prepare-package</phase>
-                                        <goals>
-                                            <goal>report</goal>
-                                        </goals>
-                                    </execution>-->
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
@@ -125,32 +111,52 @@
                             <outputDirectory>target/jacoco-ut</outputDirectory>
                         </configuration>
                     </execution>
-                </executions>
+<!--                </executions>-->
+                    <execution>
 <!--                ERROR here-->
-<!--                <configuration>
-                    <systemPropertyVariables>
-                        <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
-                    </systemPropertyVariables>
-                </configuration>-->
+                        <configuration>
+                            <systemPropertyVariables>
+                                <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+            </executions>
             </plugin>
-            <plugin>
+<!--            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <argLine>@{argLine} -more -arguments</argLine>
                     <argLine>
-                        --illegal-access=permit
+                        &#45;&#45;illegal-access=permit
                     </argLine>
                 </configuration>
+            </plugin>-->
+<!--            add instead above -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M4</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-engine</artifactId>
+                        <version>5.3.2</version>
+                    </dependency>
+                </dependencies>
             </plugin>
-<!--            <plugin>
+
+
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${maven-failsafe-plugin.version}</version>
+<!--                <version>${maven-failsafe-plugin.version}</version>-->
+                <version>3.0.0-M4</version>
                 <configuration>
                     <argLine>
-                        &#45;&#45;illegal-access=permit
+                        --illegal-access=permit
                     </argLine>
                 </configuration>
                 <executions>
@@ -161,7 +167,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
