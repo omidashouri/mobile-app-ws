@@ -90,6 +90,9 @@
                 </exclusion>
             </exclusions>-->
         </dependency>
+<!--        maven with 'spring-boot-starter-test' do not know junit and
+            install phase will fail to solve this problem
+            we add 'org.junit.jupiter' dependency, now maven can test before creating war file-->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
