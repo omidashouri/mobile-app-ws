@@ -1,6 +1,9 @@
 package ir.omidashouri.mobileappws.services;
 
+import ir.omidashouri.mobileappws.domain.Address;
 import ir.omidashouri.mobileappws.domain.User;
+import ir.omidashouri.mobileappws.mapper.AddressMapper;
+import ir.omidashouri.mobileappws.mapper.AddressMapperImpl;
 import ir.omidashouri.mobileappws.mapper.UserMapper;
 import ir.omidashouri.mobileappws.models.dto.AddressDto;
 import ir.omidashouri.mobileappws.models.dto.UserDto;
@@ -31,6 +34,8 @@ class UserServiceImplTest {
     public static final String ADDRESS_PUBLIC_ID = "123abc";
     public static final String USER_PUBLIC_ID = "123abc";
     public static final String ENCRYPTED_PASSWORD = "321cba";
+    public static final String USER_FIRST_NAME = "omidT";
+    public static final String USER_LAST_NAME = "ashouriT";
     @Mock
     UserRepository userRepository;
 
@@ -58,11 +63,13 @@ class UserServiceImplTest {
 
         userEntity = new User();
         userEntity.setId(1l);
-        userEntity.setFirstName("omidT");
+        userEntity.setFirstName(USER_FIRST_NAME);
+        userEntity.setFirstName(USER_LAST_NAME);
         userEntity.setUserPublicId(USER_PUBLIC_ID);
         userEntity.setEncryptedPassword(ENCRYPTED_PASSWORD);
         userEntity.setEmail("test@test.com");
         userEntity.setEmailVerificationToken("123abc");
+        userEntity.setAddresses(getAddressesEntity());
 
     }
 
@@ -72,7 +79,7 @@ class UserServiceImplTest {
 
         UserDto userDto1 = new UserDto();
         userDto1.setId(1l);
-        userDto1.setFirstName("omidT");
+        userDto1.setFirstName(USER_FIRST_NAME);
         userDto1.setUserPublicId(USER_PUBLIC_ID);
         userDto1.setEncryptedPassword(ENCRYPTED_PASSWORD);
 
@@ -81,7 +88,7 @@ class UserServiceImplTest {
         UserDto userDto = userService.getUserDto("test@test.ir");
 
         assertNotNull(userDto);
-        assertEquals("omidT",userDto.getFirstName());
+        assertEquals(USER_FIRST_NAME,userDto.getFirstName());
     }
 
 
@@ -107,20 +114,55 @@ class UserServiceImplTest {
         when(bCryptPasswordEncoder.encode(anyString())).thenReturn(ENCRYPTED_PASSWORD);
         when(userRepository.save(any(User.class))).thenReturn(userEntity);
 
-        AddressDto addressDto = new AddressDto();
-        addressDto.setType("shipping");
-
-        List<AddressDto> addresses = new ArrayList<AddressDto>();
-        addresses.add(addressDto);
-
         UserDto userDto = new UserDto();
         userDto.setUserPublicId(USER_PUBLIC_ID);
+        userDto.setFirstName(USER_FIRST_NAME);
+        userDto.setLastName(USER_LAST_NAME);
         userDto.setPassword("123");
-        userDto.setAddresses(addresses);
+        userDto.setAddresses(getAddressesDto());
 
         UserDto  savedUserDto = userService.createUserDto(userDto);
 
         assertNotNull(savedUserDto);
         assertEquals(savedUserDto.getFirstName(),userEntity.getFirstName());
+        assertNotNull(savedUserDto.getUserPublicId());
+        assertEquals(savedUserDto.getAddresses().size(),userEntity.getAddresses().size());
+
+    }
+
+    private List<AddressDto> getAddressesDto() {
+        AddressDto addressDto = new AddressDto();
+        addressDto.setType("shipping");
+        addressDto.setCity("City");
+        addressDto.setCountry("Country");
+        addressDto.setPostalCode("PostalCode");
+        addressDto.setStreetName("StreetName");
+
+        AddressDto billingAddressDto = new AddressDto();
+        billingAddressDto.setType("billing");
+        billingAddressDto.setCity("City");
+        billingAddressDto.setCountry("Country");
+        billingAddressDto.setPostalCode("PostalCode");
+        billingAddressDto.setStreetName("StreetName");
+
+        List<AddressDto> addresses = new ArrayList<AddressDto>();
+        addresses.add(addressDto);
+        addresses.add(billingAddressDto);
+        return addresses;
+    }
+
+
+    private List<Address> getAddressesEntity(){
+        List<AddressDto> addressesDto = getAddressesDto();
+        List<Address> addresses = new ArrayList<>();
+        AddressMapper addressMapper = new AddressMapperImpl();
+//        get Type, List of Address (List<Address>)
+//        Type listType = new TypeToken<List<Address>>(){}.getType();
+        addressesDto.stream()
+                    .map(addressMapper::AddressDtoToAddress)
+                    .forEach(addresses::add);
+
+        return addresses;
+
     }
 }
