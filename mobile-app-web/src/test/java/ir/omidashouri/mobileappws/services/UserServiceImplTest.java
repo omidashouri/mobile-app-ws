@@ -2,12 +2,14 @@ package ir.omidashouri.mobileappws.services;
 
 import ir.omidashouri.mobileappws.domain.Address;
 import ir.omidashouri.mobileappws.domain.User;
+import ir.omidashouri.mobileappws.exceptions.UserServiceException;
 import ir.omidashouri.mobileappws.mapper.AddressMapper;
 import ir.omidashouri.mobileappws.mapper.AddressMapperImpl;
 import ir.omidashouri.mobileappws.mapper.UserMapper;
 import ir.omidashouri.mobileappws.models.dto.AddressDto;
 import ir.omidashouri.mobileappws.models.dto.UserDto;
 import ir.omidashouri.mobileappws.repositories.UserRepository;
+import ir.omidashouri.mobileappws.utilities.AmazonSES;
 import ir.omidashouri.mobileappws.utilities.ErpPasswordEncoder;
 import ir.omidashouri.mobileappws.utilities.Utils;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +26,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -48,11 +50,16 @@ class UserServiceImplTest {
     @Mock
     ErpPasswordEncoder bCryptPasswordEncoder;
 
+    @Mock
+    AmazonSES amazonSES;
+
 //    when user service class created then inject the created mock objects to it (userRepository & userMapper)
     @InjectMocks
     UserServiceImpl userService;
 
     User userEntity;
+
+    UserDto userDto;
 
     @BeforeEach
     void setUp() {
@@ -71,6 +78,13 @@ class UserServiceImplTest {
         userEntity.setEmailVerificationToken("123abc");
         userEntity.setAddresses(getAddressesEntity());
 
+        userDto = new UserDto();
+        userDto.setUserPublicId(USER_PUBLIC_ID);
+        userDto.setFirstName(USER_FIRST_NAME);
+        userDto.setLastName(USER_LAST_NAME);
+        userDto.setPassword("123");
+        userDto.setAddresses(getAddressesDto());
+
     }
 
     @Test
@@ -85,10 +99,10 @@ class UserServiceImplTest {
 
         when(userRepository.findAllByEmail(anyString())).thenReturn(Arrays.asList(userEntity));
         when(userMapper.UserToUserDto(any(User.class))).thenReturn(userDto1);
-        UserDto userDto = userService.getUserDto("test@test.ir");
+        UserDto returnedUserDto = userService.getUserDto("test@test.ir");
 
-        assertNotNull(userDto);
-        assertEquals(USER_FIRST_NAME,userDto.getFirstName());
+        assertNotNull(returnedUserDto);
+        assertEquals(USER_FIRST_NAME,returnedUserDto.getFirstName());
     }
 
 
@@ -104,6 +118,18 @@ class UserServiceImplTest {
                 );
     }
 
+    @Test
+    void createUserDto_UserServiceException(){
+
+        when(userRepository.findUserByUserPublicId(anyString())).thenReturn(userEntity);
+
+        assertThrows(UserServiceException.class,
+                    ()->{
+                        userService.createUserDto(userDto);
+                    }
+                );
+
+    }
 
     @Test
     void createUserDto() {
@@ -113,13 +139,8 @@ class UserServiceImplTest {
         when(utils.generateUserId(anyInt())).thenReturn(USER_PUBLIC_ID);
         when(bCryptPasswordEncoder.encode(anyString())).thenReturn(ENCRYPTED_PASSWORD);
         when(userRepository.save(any(User.class))).thenReturn(userEntity);
-
-        UserDto userDto = new UserDto();
-        userDto.setUserPublicId(USER_PUBLIC_ID);
-        userDto.setFirstName(USER_FIRST_NAME);
-        userDto.setLastName(USER_LAST_NAME);
-        userDto.setPassword("123");
-        userDto.setAddresses(getAddressesDto());
+//        exclude a specific function to run inside createUserDto method when running a unit test
+//        Mockito.doNothing().when(amazonSES).verifyEmail(any(User.class));
 
         UserDto  savedUserDto = userService.createUserDto(userDto);
 
@@ -127,7 +148,10 @@ class UserServiceImplTest {
         assertEquals(savedUserDto.getFirstName(),userEntity.getFirstName());
         assertNotNull(savedUserDto.getUserPublicId());
         assertEquals(savedUserDto.getAddresses().size(),userEntity.getAddresses().size());
-
+        verify(utils,times(2)).generateAddressId(30);
+        verify(utils,times(savedUserDto.getAddresses().size())).generateAddressId(30);
+        verify(bCryptPasswordEncoder,times(1)).encode("123");
+        verify(userRepository,times(1)).save(any(User.class));
     }
 
     private List<AddressDto> getAddressesDto() {

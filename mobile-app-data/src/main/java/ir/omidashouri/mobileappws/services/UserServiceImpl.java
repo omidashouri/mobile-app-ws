@@ -35,6 +35,7 @@ public class UserServiceImpl implements UserService {
     private final Utils utils;
 //    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ErpPasswordEncoder bCryptPasswordEncoder;
+    private final AmazonSES amazonSES;
 
 
     @Override
@@ -43,7 +44,9 @@ public class UserServiceImpl implements UserService {
         User receivedUser = userRepository.findUserByUserPublicId(userDto.getUserPublicId());
 
         if (receivedUser != null) {
-            throw new RuntimeException("user is duplicate");
+//            we use UserServiceException instead RuntimeException
+//            throw new RuntimeException("user is duplicate");
+            throw new UserServiceException("user is duplicate");
         }
 
 //        for(AddressDto addressDto : userDto.getAddresses()){
@@ -71,7 +74,7 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(newUser);
 
 //        omiddo:send email verification to the user email address
-//        new AmazonSES().verifyEmail(savedUser);
+//        amazonSES.verifyEmail(savedUser);
 
         return modelMapper.map(savedUser,UserDto.class);
     }

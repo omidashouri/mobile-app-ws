@@ -1,7 +1,9 @@
 package ir.omidashouri.mobileappws.utilities;
 
 import ir.omidashouri.mobileappws.domain.User;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AmazonSES {
 
     final String FROM = "omidashouri@gmail.com";
