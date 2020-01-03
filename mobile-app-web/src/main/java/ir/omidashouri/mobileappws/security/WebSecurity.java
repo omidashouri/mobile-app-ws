@@ -37,6 +37,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,SecurityConstants.PASSWORD_RESET_URL)
                 .permitAll()
 
+                .antMatchers(SecurityConstants.H2_CONSOLE)
+                .permitAll()
+
 //  specify for all other url need authentication
                 .anyRequest()
                 .authenticated()
@@ -53,6 +56,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 //  authorization token in header and do not cache it
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+//        disable http frame option headers which prevent the browser to load page in html tag like a frame or iframe
+//        to open h2 database console in browser (for test) (remove it in production)
+        httpSecurity.headers().frameOptions().disable();
     }
 
 //    we specify interface to use for UserDetailsService which here extends UserDetailsService spring
