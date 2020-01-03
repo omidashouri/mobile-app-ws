@@ -1,6 +1,7 @@
 package ir.omidashouri.mobileappws.utilities;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import ir.omidashouri.mobileappws.security.SecurityConstants;
@@ -19,18 +20,18 @@ public class Utils {
     private final int ITERATIONS = 10000;
     private final int KEY_LENGHT = 256;
 
-    public String generateUserId(int lenght){
+    public String generateUserId(int lenght) {
         return generateRandomString(lenght);
     }
 
-    public String generateAddressId(int lenght){
+    public String generateAddressId(int lenght) {
         return generateRandomString(lenght);
     }
 
-    public String generateRandomString(int length){
+    public String generateRandomString(int length) {
         StringBuilder returnValue = new StringBuilder(length);
 
-        for(int i=0;i<length;i++){
+        for (int i = 0; i < length; i++) {
             returnValue.append(ALPHABET.charAt(RANDOM.nextInt(ALPHABET.length())));
         }
 
@@ -42,46 +43,56 @@ public class Utils {
      * and decrypt it which is created in 'generateEmailVerificationToken' method.
      * and check token in reset password method expiration time
      */
-    public static boolean hasTokenExpired(String token){
+    public static boolean hasTokenExpired(String token) {
+
+        boolean returnValue = false;
+
+        try {
 
 //        decrypt the ourselves encrypted token
-        Claims claims = Jwts.parser()
-                            .setSigningKey(SecurityConstants.getTokenSecret())
-                            .parseClaimsJws(token)
-                            .getBody();
+            Claims claims = Jwts.parser()
+                    .setSigningKey(SecurityConstants.getTokenSecret())
+                    .parseClaimsJws(token)
+                    .getBody();
 
-//          expiration date set inside token
-        Date tokenExpirationDate = claims.getExpiration();
+//        expiration date set inside token
+            Date tokenExpirationDate = claims.getExpiration();
 
 //        date object equal to now
-        Date todayDate = new Date();
+            Date todayDate = new Date();
 
 //        compare two date and if true return expired(false)
-        return tokenExpirationDate.before(todayDate);
+            returnValue = tokenExpirationDate.before(todayDate);
+        } catch (ExpiredJwtException exception) {
+            returnValue = false;
+        }
+
+        return returnValue;
+
     }
 
     /**
      * create email verification token in create user and forget email
      */
-   public static String generateEmailVerificationToken(String publicUserId){
+    public static String generateEmailVerificationToken(String publicUserId) {
         String token = Jwts.builder()
-                            .setSubject(publicUserId)
+                .setSubject(publicUserId)
 //                expiration time is now plus ten days from today
-                            .setExpiration(new Date(System.currentTimeMillis()+SecurityConstants.EXPIRATION_TIME))
+                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
 //                then sign it with security algorithm and our own security constant
-                            .signWith(SignatureAlgorithm.HS512,SecurityConstants.getTokenSecret())
-                            .compact();
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret())
+                .compact();
         return token;
-   }
+    }
 
 
-    public String generatePasswordResetToken(String publicUserId){
-       String token = Jwts.builder()
-               .setSubject(publicUserId)
-               .setExpiration(new Date(System.currentTimeMillis()+SecurityConstants.EXPIRATION_TIME))
+    public String generatePasswordResetToken(String publicUserId) {
+        String token = Jwts.builder()
+                .setSubject(publicUserId)
+                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
 //               sign in to the token with the same email verification token
-               .signWith(SignatureAlgorithm.HS512,SecurityConstants.getTokenSecret())
-               .compact();
-       return token;
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret())
+                .compact();
+        return token;
     }
 }

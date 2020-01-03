@@ -120,7 +120,7 @@ class UserServiceImplTest {
 
     @Test
     void createUserDto_UserServiceException(){
-
+//        Unit Test
         when(userRepository.findUserByUserPublicId(anyString())).thenReturn(userEntity);
 
         assertThrows(UserServiceException.class,
@@ -133,7 +133,7 @@ class UserServiceImplTest {
 
     @Test
     void createUserDto() {
-
+//        Unit Test
         when(userRepository.findUserByUserPublicId(anyString())).thenReturn(null);
         when(utils.generateAddressId(anyInt())).thenReturn(ADDRESS_PUBLIC_ID);
         when(utils.generateUserId(anyInt())).thenReturn(USER_PUBLIC_ID);

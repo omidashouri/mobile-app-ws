@@ -38,7 +38,7 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-
+//        Unit Test
         userDto = new UserDto();
         userDto.setUserPublicId(USER_PUBLIC_ID);
         userDto.setFirstName(USER_FIRST_NAME);
@@ -54,6 +54,7 @@ class UserControllerTest {
 
     @Test
     void getUser() {
+//        Unit Test
 
         when(userService.getUserByUserPublicId(anyString())).thenReturn(userDto);
 
