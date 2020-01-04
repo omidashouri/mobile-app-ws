@@ -71,7 +71,7 @@ class UserServiceImplTest {
         userEntity = new User();
         userEntity.setId(1l);
         userEntity.setFirstName(USER_FIRST_NAME);
-        userEntity.setFirstName(USER_LAST_NAME);
+        userEntity.setLastName(USER_LAST_NAME);
         userEntity.setUserPublicId(USER_PUBLIC_ID);
         userEntity.setEncryptedPassword(ENCRYPTED_PASSWORD);
         userEntity.setEmail("test@test.com");
