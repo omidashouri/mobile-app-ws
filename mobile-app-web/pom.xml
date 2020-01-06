@@ -41,11 +41,13 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+        <!--         add for helping in spring security login Test-->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+
 <!--    use in authorization filter and set in header   -->
 <!--        <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -148,6 +150,7 @@
         </dependency>
         <!--<        Webjars for jQuery and Bootstrap-->
 
+        <!-->        Rest Assured for Json Test-->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
@@ -168,6 +171,7 @@
             <artifactId>spring-mock-mvc</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--<        Rest Assured for Json Test-->
     </dependencies>
 
 </project>
