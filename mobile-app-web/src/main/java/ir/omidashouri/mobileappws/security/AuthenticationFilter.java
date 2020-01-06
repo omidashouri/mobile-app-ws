@@ -53,7 +53,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                             new ArrayList<>())
             );
 
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -74,17 +73,17 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret() )
                 .compact();
 
-//        get bean from context, bean name is name of class start with lowercase
+//    get bean from context, bean name is name of class start with lowercase
         UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
 
 //    use for adding public user id to response header
         UserDto userDto = userService.getUserDto(userName);
 
+//    add token to response header
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
 
 //    add public user id to response header
         res.addHeader("UserID", userDto.getUserPublicId());
-
     }
 
 }

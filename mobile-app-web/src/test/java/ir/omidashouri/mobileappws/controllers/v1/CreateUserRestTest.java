@@ -1,6 +1,7 @@
 package ir.omidashouri.mobileappws.controllers.v1;
 
 
+import io.restassured.RestAssured;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import ir.omidashouri.mobileappws.services.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +15,6 @@ import org.springframework.security.core.userdetails.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
@@ -32,8 +32,8 @@ public class CreateUserRestTest {
 
     @BeforeEach
     void setUp() {
-/*        RestAssured.baseURI="http://localhost";
-        RestAssured.port=8080;*/
+        RestAssured.baseURI="http://localhost";
+        RestAssured.port=8080;
 
         RestAssuredMockMvc.standaloneSetup(userController);
     }
@@ -62,9 +62,15 @@ public class CreateUserRestTest {
 
 
         given()
-                .body(userRequest)
+                .headers(
+                        "Authorization",
+                        "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJvbWlkYXNob3VyaUBnbWFpbC5jb20iLCJleHAiOjE1NzkxMjAxMDZ9.nWPbLRA9lnt2rn4x6py2EBaKnB9sHvtwUGX1CLeFQaStjYS9WlfuiwHzY2keLdYoowDFZUXzOC-EGo17pZPM8w",
+                        "Content-Type",
+                        io.restassured.http.ContentType.JSON,
+                        "Accept",
+                        io.restassured.http.ContentType.JSON)
                 .when()
-                .get("/users/login")
+                .get("http://localhost:8080/v1/users")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -76,64 +82,8 @@ public class CreateUserRestTest {
 
     }
 
+//    @WithMockUser(username = "omidashouri@gmail.com",password = "123",authorities = { "ADMIN", "USER" })
 
-    @Test
-    final void testCreateUser() {
-
-        List<Map<String, Object>> userAddresses = new ArrayList<>();
-
-        Map<String, Object> shippingAddress = new HashMap<>();
-        shippingAddress.put("city", "Vancouver");
-        shippingAddress.put("country", "Canada");
-        shippingAddress.put("streetName", "123 Street name");
-        shippingAddress.put("postalCode", "123456");
-        shippingAddress.put("type", "shipping");
-
-        Map<String, Object> billingAddress = new HashMap<>();
-        billingAddress.put("city", "Vancouver");
-        billingAddress.put("country", "Canada");
-        billingAddress.put("streetName", "123 Street name");
-        billingAddress.put("postalCode", "123456");
-        billingAddress.put("type", "billing");
-
-        userAddresses.add(shippingAddress);
-        userAddresses.add(billingAddress);
-
-        Map<String, Object> userDetails = new HashMap<>();
-        userDetails.put("firstName", "Sergey");
-        userDetails.put("lastName", "Kargopolov");
-        userDetails.put("email", "sergey.kargopolov@swiftdeveloperblog.com");
-        userDetails.put("password", "123");
-        userDetails.put("addresses", userAddresses);
-
-
-
-
-
-/*        Response response = given().
-                contentType("application/json").
-                accept("application/json").
-                body(userDetails).
-                when().
-                post( "/v1/users").
-                then().
-                statusCode(200).
-                contentType("application/json").
-                extract().
-                response();
-
-        String userId = response.jsonPath().getString("userId");
-        assertNotNull(userId);
-        assertTrue(userId.length() == 30);
-
-        String bodyString = response.body().asString();*/
-
-
-
-
-
-
-    }
 
 
 }

@@ -78,6 +78,7 @@ public class UserController {
 
         UserRest returnValue = new UserRest();
 
+//        this must be username but here is email address
         if(userDetails.getFirstName().isEmpty()){
             throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
         }
