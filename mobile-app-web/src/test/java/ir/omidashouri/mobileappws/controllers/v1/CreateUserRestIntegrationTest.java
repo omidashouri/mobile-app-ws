@@ -37,6 +37,10 @@ public class CreateUserRestIntegrationTest {
         RestAssured.baseURI="http://localhost";
         RestAssured.port=8080;
 
+        RestAssuredMockMvc.basePath="http://localhost:8080";
+
+
+
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
     }
 
