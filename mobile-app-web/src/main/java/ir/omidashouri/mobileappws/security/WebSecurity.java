@@ -3,12 +3,18 @@ package ir.omidashouri.mobileappws.security;
 import ir.omidashouri.mobileappws.services.UserService;
 import ir.omidashouri.mobileappws.utilities.ErpPasswordEncoder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -22,7 +28,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception{
-        httpSecurity.csrf().disable().authorizeRequests()
+        httpSecurity
+//                enable cross origin resource sharing
+                .cors().and()
+
+                .csrf().disable().authorizeRequests()
 
 //  specify which url do not need authentication (or they are public)
                 .antMatchers(HttpMethod.POST,SecurityConstants.SIGN_UP_URL)
@@ -79,4 +89,26 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         filter.setFilterProcessesUrl("/users/login");
         return filter;
     }
+
+//    define cross origin resource sharing
+//    if not set we receive preflight error
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(){
+        final CorsConfiguration corsConfiguration = new CorsConfiguration();
+
+//        or we can specify Arrays.asList("http://localhost:8080","http://www.omidashouri.ir")
+        corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
+//        or we can specify Arrays.asList("GET","POST","PUT","DELETE","OPTIONS")
+        corsConfiguration.setAllowedMethods(Arrays.asList("*"));
+//       enable credentials in response like cookies or authorization headers or ssl certificates
+        corsConfiguration.setAllowCredentials(true);
+//        enable headers like Arrays.asList("Authorization","Cache-Control", "Content-Type") or all by *
+        corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
+
+//        configure url base configuration source by specify specific path like "/users/login" or any path by /**
+        final UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**",corsConfiguration);
+        return urlBasedCorsConfigurationSource;
+        }
+
 }

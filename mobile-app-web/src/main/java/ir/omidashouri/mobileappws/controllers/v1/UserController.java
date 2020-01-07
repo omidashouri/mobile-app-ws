@@ -35,6 +35,10 @@ public class UserController {
     private final UserDtoUserReqMapper userDtoUserReqMapper;
     private final AddressRestMapper addressRestMapper;
 
+//    response to All ajax from any origin and any domain or specific by {"http://localhost:8082","http://localhost:8083"}
+//    we can use it on class, we define it in WebConfig class
+//    @CrossOrigin(origins = "*")
+
     // http://localhost:8080/v1/users/aLIRVt88hdQ858q5AMURm1QI6DC3Je
     // in header add Accept : application/xml or application/json
     @GetMapping(path = "/{userPublicId}",

@@ -135,3 +135,13 @@ GET: http://localhost:8080/v1/users/UAQAp4oxwUfW9K3GrgsYIcSwCL3Pvv/addresses/RdI
 
 -----------------------
 
+CORS = Cross Origin Resource Sharing
+
+-----------------------
+
+preflight = A preflight request is a small request that is sent by the browser before the actual request.
+            It contains information like which HTTP method is used,
+            as well as if any custom HTTP headers are present. 
+            The preflight gives the server a chance to examine what the actual request will look like before it's made.
+
+-----------------------
