@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 class UserRepositoryTest {
 
+    public static final String USER_PUBLIC_ID = "1a2b3c4d5e6f";
     @Autowired
     UserRepository userRepository;
 
@@ -134,7 +135,7 @@ class UserRepositoryTest {
     void updateUserEmailVerificationStatus() {
 
         boolean emailVerificationStatusNew =false;
-        String userPublicId = "1a2b3c4d5e6f";
+        String userPublicId = USER_PUBLIC_ID;
 
         userRepository.updateUserEmailVerificationStatus(emailVerificationStatusNew,userPublicId);
 
@@ -147,13 +148,26 @@ class UserRepositoryTest {
 
     }
 
+
+    @Test
+    void findUserByUserPublicIdJpql() {
+
+        String userPublicId = USER_PUBLIC_ID;
+        User user = userRepository.findUserByUserPublicIdJpql(userPublicId);
+
+        assertNotNull(user);
+        assertTrue(user.getUserPublicId().equalsIgnoreCase(USER_PUBLIC_ID));
+    }
+
+
+
     private void createRecord() {
 
         User userEntity = new User();
 
         userEntity.setFirstName("omidT");
         userEntity.setLastName("ashouriT");
-        userEntity.setUserPublicId("1a2b3c4d5e6f");
+        userEntity.setUserPublicId(USER_PUBLIC_ID);
         userEntity.setEncryptedPassword("xxx");
         userEntity.setEmail("omidashouriT@gmail.com");
         userEntity.setEmailVerificationStatus(true);
