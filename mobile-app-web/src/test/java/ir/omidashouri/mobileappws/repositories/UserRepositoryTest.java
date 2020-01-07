@@ -159,6 +159,42 @@ class UserRepositoryTest {
         assertTrue(user.getUserPublicId().equalsIgnoreCase(USER_PUBLIC_ID));
     }
 
+    @Test
+    void getUserFullNameByUserPublicId() {
+
+        String userPublicId = USER_PUBLIC_ID;
+        List<Object[]> users = userRepository.getUserFullNameByUserPublicId(userPublicId);
+
+        assertNotNull(users);
+        assertTrue(users.size() == 1);
+
+        Object[] user = users.get(0);
+
+        String userFirstName = String.valueOf(user[0]);
+        String userLastName = String.valueOf(user[1]);
+
+        assertNotNull(userFirstName);
+        assertNotNull(userLastName);
+
+        System.out.println("First Name = " + userFirstName);
+        System.out.println("Last Name = " + userLastName);
+
+    }
+
+    @Test
+    void updateUserEmailVerificationStatusJpql() {
+
+        boolean emailVerificationStatusNew =false;
+        String userPublicId = USER_PUBLIC_ID;
+
+        userRepository.updateUserEmailVerificationStatusJpql(emailVerificationStatusNew,userPublicId);
+
+        User userSaved = userRepository.findUserByUserPublicId(userPublicId);
+
+        boolean emailVerificationStatusStored = userSaved.getEmailVerificationStatus();
+
+        assertTrue(emailVerificationStatusStored == emailVerificationStatusNew);
+    }
 
 
     private void createRecord() {

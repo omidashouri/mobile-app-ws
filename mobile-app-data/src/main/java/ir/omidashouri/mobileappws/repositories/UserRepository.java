@@ -62,4 +62,12 @@ public interface UserRepository extends PagingAndSortingRepository<User,Long> {
     @Query("select user from User user where user.userPublicId=:uPublicId")
     User findUserByUserPublicIdJpql(@Param("uPublicId") String userPublicId);
 
+    @Query("select user.firstName,user.lastName from User user where user.userPublicId=:uPublicId")
+    List<Object[]> getUserFullNameByUserPublicId(@Param("uPublicId") String userPublicId);
+
+    @Transactional
+    @Modifying
+    @Query("update User user set user.emailVerificationStatus =:eVStatus where user.userPublicId =:uPublicId ")
+    void updateUserEmailVerificationStatusJpql(@Param("eVStatus") boolean emailVerificationStatus,@Param("uPublicId") String userPublicId);
+
 }
