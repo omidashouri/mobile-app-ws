@@ -50,6 +50,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(SecurityConstants.H2_CONSOLE)
                 .permitAll()
 
+                .antMatchers("/v2/api-docs","/configuration/**","/swagger*/**","/webjars/**")
+                .permitAll()
+
 //  specify for all other url need authentication
                 .anyRequest()
                 .authenticated()
