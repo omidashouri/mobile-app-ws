@@ -1,5 +1,8 @@
 package ir.omidashouri.mobileappws.controllers.v1;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import ir.omidashouri.mobileappws.exceptions.UserServiceException;
 import ir.omidashouri.mobileappws.mapper.AddressRestMapper;
 import ir.omidashouri.mobileappws.mapper.UserDtoUserReqMapper;
@@ -55,11 +58,16 @@ public class UserController {
         return returnValue;
     }
 
+    @ApiOperation(value = "THe Get User Details Web Service Endpoint ",
+                  notes = "This web service end points return user details. use public user id in url path")
 //  use RequestParam because want to retrieve query parameter from url
 //  page start from zero
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authorization", value = "${userController.authorization.header.description}", paramType = "header")
+    })
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE})
-    public List<UserRest> getusers(@RequestParam(value = "page",defaultValue = "1") int pageValue
-                                  ,@RequestParam(value = "limit",defaultValue = "25") int limitValue){
+    public List<UserRest> getUsers(@RequestParam(value = "page",defaultValue = "1") int pageValue
+                                  , @RequestParam(value = "limit",defaultValue = "25") int limitValue){
 
         List<UserDto> userDtoList = userService.getUserDtosByPageAndLimit(pageValue,limitValue);
 

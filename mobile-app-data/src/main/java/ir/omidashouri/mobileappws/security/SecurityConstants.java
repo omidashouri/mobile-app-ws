@@ -12,7 +12,7 @@ public class SecurityConstants {
 //    1000 millisecond ( or one second) * 60 one minutes * 60 one hour = 1000*60*60
     public static final long PASSWORD_RESET_EXPIRATION_TIME = 3600000; // 1 hour
     public  static final String TOKEN_PREFIX = "Bearer ";
-    public static final String HEADER_STRING = "Authorization";
+    public static final String HEADER_STRING = "authorization";
     public static final String SIGN_UP_URL = "/v1/users";
     public static final String VERIFICATION_EMAIL_URL = "/v1/users/email-verification";
     public static final String PASSWORD_RESET_REQUEST_URL = "/v1/users/password-reset-request";
