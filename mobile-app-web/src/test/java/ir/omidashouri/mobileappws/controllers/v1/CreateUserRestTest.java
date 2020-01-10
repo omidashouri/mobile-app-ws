@@ -70,7 +70,7 @@ public class CreateUserRestTest {
                         "Accept",
                         io.restassured.http.ContentType.JSON)
                 .when()
-                .get("http://localhost:8080/v1/users")
+                .get("http://localhost:8080/mobile-app-ws/v1/users")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")

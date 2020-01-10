@@ -23,8 +23,8 @@ import java.util.List;
 @EnableSwagger2WebMvc
 public class SwaggerConfig extends WebMvcConfigurationSupport {
 //    swagger config class should be near main SpringBootApplication class
-//    http://localhost:8080/v2/api-docs
-//    http://localhost:8080/swagger-ui.html
+//    http://localhost:8080/mobile-app-ws/v2/api-docs
+//    http://localhost:8080/mobile-app-ws/swagger-ui.html
     @Bean
     public Docket apiDocket(){
 

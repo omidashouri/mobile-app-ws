@@ -23,6 +23,7 @@ public class UsersWebServiceEndpointTest {
 
 //    for running this class first start application then execute this class
 
+    private final String CONTEXT_PATH="/mobile-app-ws";
     private static final String USER_EMAIL_ADDRESS = "omidashouri@gmail.com";
     private static final String USER_PASSWORD = "123";
 
@@ -53,7 +54,7 @@ public class UsersWebServiceEndpointTest {
                 .accept(ContentType.JSON)
                 .body(userLogin)
                 .when()
-                .post("/users/login")
+                .post(CONTEXT_PATH+"/users/login")
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .extract()
@@ -79,7 +80,7 @@ public class UsersWebServiceEndpointTest {
                                 .contentType(ContentType.JSON)
                                 .accept(ContentType.JSON)
                 .when()
-                .get("/v1/users/{userPubId}")
+                .get(CONTEXT_PATH+"/v1/users/{userPubId}")
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
@@ -122,7 +123,7 @@ public class UsersWebServiceEndpointTest {
                 .pathParam("userPubId",userPublicId)
                 .body(userUpdating)
                 .when()
-                .put("/v1/users/{userPubId}")
+                .put(CONTEXT_PATH+"/v1/users/{userPubId}")
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
@@ -154,7 +155,7 @@ public class UsersWebServiceEndpointTest {
                 .header("Authorization",authorizationHeader)
                 .pathParam("userPubId",userPublicId)
                 .when()
-                .delete("/v1/users/{userPubId}")
+                .delete(CONTEXT_PATH+"/v1/users/{userPubId}")
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)

@@ -29,6 +29,9 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = DEFINED_PORT)
 public class CreateUserRestIntegrationTest {
 
+
+    private final String CONTEXT_PATH ="/mobile-app-ws";
+
     @Autowired
     private WebApplicationContext webApplicationContext;
 
@@ -58,13 +61,13 @@ public class CreateUserRestIntegrationTest {
                         "Accept",
                         io.restassured.http.ContentType.JSON)
                 .when()
-                .get("/v1/users")
+                .get(CONTEXT_PATH+"/v1/users")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value());
 
         RestAssuredMockMvc.given()
-                            .get("http://localhost:8080/v1/users")
+                            .get("http://localhost:8080/mobile-app-ws/v1/users")
                             .then()
                             .assertThat()
                             .statusCode(HttpStatus.OK.value());
@@ -108,7 +111,7 @@ public class CreateUserRestIntegrationTest {
                                 accept("application/json").
                                 body(userDetails).
                                 when().
-                                post( "/v1/users").
+                                post( CONTEXT_PATH+"/v1/users").
                                 then().
                                 statusCode(200).
                                 contentType("application/json").

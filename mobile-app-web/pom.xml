@@ -15,6 +15,9 @@
 
     <artifactId>mobile-app-web</artifactId>
 
+    <!--add for run in apache tomcat-->
+    <packaging>war</packaging>
+
     <properties>
         <jquery-ui.version>1.12.1</jquery-ui.version>
         <bootstrap.version>4.3.1</bootstrap.version>
@@ -29,6 +32,13 @@
             <artifactId>mobile-app-data</artifactId>
             <groupId>ir.omidashouri</groupId>
             <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!--add for run in apache tomcat-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

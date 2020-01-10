@@ -145,3 +145,27 @@ preflight = A preflight request is a small request that is sent by the browser b
             The preflight gives the server a chance to examine what the actual request will look like before it's made.
 
 -----------------------
+install tomcat:
+
+d:\apache-tomcat-9.0.30\webapps\manager\WEB-INF\web.xml
+    <multipart-config>
+      <!-- 100MB max -->
+      <max-file-size>104857600</max-file-size>
+      <max-request-size>104857600</max-request-size>
+      <file-size-threshold>0</file-size-threshold>
+    </multipart-config>
+  </servlet>
+  
+  d:\apache-tomcat-9.0.30\conf\tomcat-users.xml
+  <role rolename="tomcat"/>
+  <role rolename="manager-gui"/>
+  <role rolename="admin-gui"/>
+  <role rolename="admin-script"/>
+  <role rolename="manager-jmx"/>
+  <role rolename="manager-status"/>
+  <role rolename="manager-script"/>
+  <user username="tomcat" password="tomcat" 
+        roles="tomcat,manager-gui,admin-gui,admin-script
+                ,manager-jmx,manager-status,manager-script"/>
+  
+  -----------------------
