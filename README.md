@@ -169,3 +169,22 @@ d:\apache-tomcat-9.0.30\webapps\manager\WEB-INF\web.xml
                 ,manager-jmx,manager-status,manager-script"/>
   
   -----------------------
+  
+  -after change packaging to 'WAR':
+  
+  WARNING: Illegal reflective access by org.springframework.cglib.core.ReflectUtils
+            method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+  
+-In JDK 9+, add the following option to the JVM to disable the warning from Spring's use of CGLIB:
+   -Add the --add-opens mentioned by Jan to your run/debug configuration. 
+    Just edit the configuration and look under Environment / VM Options. 
+    This takes care of silencing some of the "illegal access messages".
+  
+  -for intellij add ->
+    --add-opens java.base/java.lang=ALL-UNNAMED
+  
+  -in command line add ->
+    java --add-opens java.base/java.lang=ALL-UNNAMED -jar target/*.jar
+    
+    
+  -----------------------
