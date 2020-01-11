@@ -8,6 +8,8 @@ import ir.omidashouri.mobileappws.repositories.AddressRepository;
 import ir.omidashouri.mobileappws.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
+
+    private static final Logger log = LoggerFactory.getLogger(AddressServiceImpl.class);
     // important: we should have only one mapper
     private final AddressMapper addressMapper;
     private final AddressRepository addressRepository;
