@@ -354,3 +354,73 @@ d:\apache-tomcat-9.0.30\webapps\manager\WEB-INF\web.xml
   
   -----------------------
   
+  Self Join:
+  
+  On deleting child, parent is also getting deleted:
+  
+  @ManyToOne(cascade={CascadeType.ALL})
+  @JoinColumn(name="parent_id")
+  private Menu parent;
+  
+  @OneToMany(mappedBy="parent",orphanRemoval=true)
+  private List<Menu> children = new ArrayList<Menu>();
+  
+  Do not use cascade={CascadeType.ALL} on Parent if you do wish to cascade CRUD operations from child to parent:
+  
+  --- --- --- another example:
+  
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Column(name = "category_id")
+   private Integer categoryId;
+   
+   @NotFound(action = NotFoundAction.IGNORE)
+   @ManyToOne
+   @JsonIgnore
+   @JoinColumn(name = "parent_category_id")
+   private FetchSubCategory mainCategory;   
+   
+   @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)//Avoiding empty json arrays.objects
+   @OneToMany(mappedBy = "mainCategory", fetch = FetchType.EAGER)
+   private List<FetchSubCategory> subCategory;
+   
+   Get your sub categories:
+   
+   public List<FetchSubCategory> fetchSubCategory() throws SQLException, ClassNotFoundException, IOException {
+       List<FetchSubCategory> groupList = null;
+       try {
+           Session session = sessionFactory.getCurrentSession();
+           Query query = session.createQuery("select distinct e FROM FetchSubCategory e INNER JOIN e.subCategory m ORDER BY m.mainCategory");
+           groupList = query.list();
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+       return groupList;
+   }
+   
+   
+  --- --- --- another example:
+  
+  where there is only ever only one child per depth:
+  
+  @Entity
+  @Table(name="TREE")
+  public class Tree {
+      @Id
+      @GeneratedValue(strategy= GenerationType.AUTO)
+      private Long treeId;
+    
+      // the column parentTree is going to return the object Tree, instead of the parentTree as a Long
+      @OneToOne(fetch=FetchType.EAGER, optional = false)
+      @JoinColumn(name="parent_tree", referencedColumnName="treeId", nullable = true)  
+      private Tree parentTree;
+  
+      @Override
+      public String toString() {
+          return "Tree [treeId=" + treeId + ", parentTree=" + parentTree + "]";
+      }
+ 
+  }
+  
+  -----------------------
+  
