@@ -188,3 +188,169 @@ d:\apache-tomcat-9.0.30\webapps\manager\WEB-INF\web.xml
     
     
   -----------------------
+  
+  Many-to-One Associations:
+  
+  Unidirectional Many-to-One Association:
+  
+  @Entity
+  public class OrderItem {   
+      @ManyToOne
+      @JoinColumn(name = “fk_order”)
+      private Order order;
+  }
+  
+  Order o = em.find(Order.class, 1L);
+  OrderItem i = new OrderItem();
+  i.setOrder(o);
+  em.persist(i);
+  
+  ---
+  
+  Unidirectional One-to-Many Association:
+  
+  @Entity
+  public class Order {   
+      @OneToMany
+      @JoinColumn(name = “fk_order”)
+      private List<OrderItem> items = new ArrayList<OrderItem>();
+  }
+  
+  Order o = em.find(Order.class, 1L);
+  OrderItem i = new OrderItem();
+  o.getItems().add(i);
+  em.persist(i);
+  
+  --- --- ---
+  
+  Bidirectional Many-to-One Associations:
+  
+  @Entity
+  public class OrderItem {   
+      @ManyToOne
+      @JoinColumn(name = “fk_order”)
+      private Order order;
+  }
+  
+  @Entity
+  public class Order {   
+      @OneToMany(mappedBy = “order”)
+      private List<OrderItem> items = new ArrayList<OrderItem>();
+  }
+  
+  But adding and removing an entity from the relationship requires an additional step. 
+  You need to update both sides of the association:
+  
+  Order o = em.find(Order.class, 1L); 
+  OrderItem i = new OrderItem();
+  i.setOrder(o);
+  o.getItems().add(i);
+  em.persist(i);
+  
+  a lot of developers prefer to implement it in a utility method which updates both entities.
+  
+  @Entity
+  public class Order {
+      …           
+      public void addItem(OrderItem item) {
+          this.items.add(item);
+          item.setOrder(this);
+      }
+      …
+  }
+  
+  -----------------------
+  
+  Many-to-Many Associations:
+  
+  Unidirectional Many-to-Many Associations:
+    
+  @Entity
+  public class Store {   
+      @ManyToMany
+      @JoinTable(name = “store_product”,
+             joinColumns = { @JoinColumn(name = “fk_store”) },
+             inverseJoinColumns = { @JoinColumn(name = “fk_product”) })
+      private Set<Product> products = new HashSet<Product>();   
+      …
+  }
+  
+  Store s = em.find(Store.class, 1L);
+  Product p = new Product();
+  s.getProducts().add(p);
+  em.persist(p);
+  
+  --- --- ---
+  
+  Bidirectional Many-to-Many Associations:
+  
+  @Entity
+  public class Store {   
+      @ManyToMany
+      @JoinTable(name = “store_product”,
+             joinColumns = { @JoinColumn(name = “fk_store”) },
+             inverseJoinColumns = { @JoinColumn(name = “fk_product”) })
+      private Set<Product> products = new HashSet<Product>();   
+      …
+  }
+  
+  @Entity
+  public class Product{   
+      @ManyToMany(mappedBy=”products”)
+      private Set<Store> stores = new HashSet<Store>();   
+      …
+  }
+  
+  You need to update both ends of a bidirectional association when you want to add or remove an entity.
+  
+  @Entity
+  public class Store {   
+      public void addProduct(Product p) {
+          this.products.add(p);
+          p.getStores().add(this);
+      }   
+      public void removeProduct(Product p) {
+          this.products.remove(p);
+          p.getStores().remove(this);
+      }   
+      …
+  }
+  
+  -----------------------
+  
+  One-to-One Associations:
+  
+  Unidirectional One-to-One Associations:
+  
+  @Entity
+  public class Customer{   
+      @OneToOne
+      @JoinColumn(name = “fk_shippingaddress”)
+      private ShippingAddress shippingAddress;   
+      …
+  }
+  
+  Customer c = em.find(Customer.class, 1L);
+  ShippingAddress sa = c.getShippingAddress();
+  
+  --- --- ---
+  
+  Bidirectional One-to-One Associations:
+  
+  @Entity
+  public class Customer{
+      @OneToOne
+      @JoinColumn(name = “fk_shippingaddress”)
+      private ShippingAddress shippingAddress;
+         …
+  }
+  
+  @Entity
+  public class ShippingAddress{
+      @OneToOne(mappedBy = “shippingAddress”)
+      private Customer customer;
+      …
+  }
+  
+  -----------------------
+  
