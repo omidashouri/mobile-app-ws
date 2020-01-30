@@ -424,3 +424,145 @@ d:\apache-tomcat-9.0.30\webapps\manager\WEB-INF\web.xml
   
   -----------------------
   
+  ID Generators:
+    GenerationType.AUTO
+    GenerationType.IDENTITY
+    GenerationType.SEQUENCE
+    GenerationType.TABLE
+    
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    
+    @GenerationType.IDENTITY
+    create table employee(id int PRIMARY KEY AUTO_INCREMENT,name varchare(20));
+    
+    
+  -----------------------
+      
+      Sorting:
+      repository.fondAll(new Sort(new Sort.Order(Direction.DESC,"name"),new Sort.Order("price")));
+      
+      Paging And Sorting:
+      Pageable pageable = new PageRequest(0,2,Direction.DESC,"name");
+      repository.findAll(pageable);
+  
+  -----------------------
+  Inheritance Strategies:
+        SINGLE_TABLE
+        TABLE_PER_CLASS
+        JOINED
+       
+        
+  SINGLE_TABLE:
+        -here we have one table in database 
+        -and field 'pmode' fill when each extended table have value
+        @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+        @DiscriminatorColumn(name="pmode",discriminatorType=DiscriminatorType.STRING)
+        public abstract class Payment(id,amount)
+        
+        @DiscriminatorValue("cc")
+        public class CreditCard extends Payment(cardnumber)
+        
+        @DiscriminatorValue("ch")
+        public class Check extends Payment(checknumber)
+  
+  
+  TABLE_PER_CLASS:
+        -here we have three table in database 
+        -and each extended table have field 'id' and 'amount' as their parent table
+        @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
+        public abstract class Payment(id,amount)
+        
+        public class CreditCard extends Payment(cardnumber)
+        
+        public class Check extends Payment(checknumber)
+        
+  
+  JOINED:
+        -here we have three table
+        -and field 'id' in child tables are foreignKey of field 'id' in parent tab;e
+        -we specify join when creating child tables
+        @Inheritance(strategy=InheritanceType.JOINED)
+        public abstract class Payment(id,amount)
+        
+        @PrimaryKeyJoinColumn(name="id")
+        public class CreditCard extends Payment(cardnumber)
+        
+        @PrimaryKeyJoinColumn(name="id")
+        public class Check extends Payment(checknumber)
+  
+  
+  
+  
+  -----------------------
+  Component Mapping:
+    
+        create table employee(
+        id int,
+        name varchar(20),
+        streetaddress varchar(30),
+        city varchar(20),
+        state varchar(20)
+        )
+    
+        
+        public class Employee
+            id;
+            name;
+            @Embeded
+            Address address;
+            
+        @Embeddable
+        Address
+            streetaddress;
+            city;
+            state;
+  
+  
+  
+  -----------------------
+      
+  Hibernate Caching Mechanism:
+        Level one
+        level two
+        
+        
+  Level One:
+        Session session = entityManager.unwrap(Session.class);
+        Product product = repository.findOne(1);
+        //free the cache
+        session.evict(product);
+        
+  Level Two:
+        1.add maven dependency:
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-ehcache</artifactId>
+            </dependency>
+        2.enable cache for the application:
+            spring.jpa.properties.hibernate.cache.use_second_level_cache=true
+            spring.jpa.properties.hibernate.cache.use_query_cache=true
+            spring.jpa.properties.hibernate.cache.region.factory_class=org.hibernate.cache.ehcache.EhCacheRegionFactory
+            spring.jpa.properties.javax.persistence.sharedCache.mode=ALL
+            spring.cache.ehcache.config=classpath:ehcache.xml
+        3.create ehcache.xml:
+            <?xml version="1.0" encoding="UTF-8"?>
+            <ehcache>
+              <diskStore path="java.io.tmpdir"/>
+              <defaultCache maxElementsInMemory="1000" eternal="false" tomeToIdleSeconds="5" timeToLiveSeconds="10" overflowToDisk="true"/>
+            </ehcache>
+        4.make entities cacheables:
+                @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+                public class Product implements Serializable
+            
+            
+  Cache Concurrency Strategies:
+        -READ_ONLY
+        -NONSTRICT_READ_WRITE
+        -READ_WRITE
+        -TRANSACTIONAL
+        
+  -----------------------
+  
+  
+  
