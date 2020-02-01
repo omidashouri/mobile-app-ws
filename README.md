@@ -214,8 +214,18 @@ d:\apache-tomcat-9.0.30\webapps\manager\WEB-INF\web.xml
       @OneToMany
       @JoinColumn(name = “fk_order”)
       private List<OrderItem> items = new ArrayList<OrderItem>();
-  }
-  
+      
+      public void addItem(OrderItem item){
+          if(null != item){
+            if(null == items){
+              items = new ArrayList<>();
+          }
+           item.setOrder(this);
+           items.add(item);
+         }
+       }
+     }
+
   Order o = em.find(Order.class, 1L);
   OrderItem i = new OrderItem();
   o.getItems().add(i);
@@ -379,10 +389,6 @@ d:\apache-tomcat-9.0.30\webapps\manager\WEB-INF\web.xml
    @JsonIgnore
    @JoinColumn(name = "parent_category_id")
    private FetchSubCategory mainCategory;   
-   
-   @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)//Avoiding empty json arrays.objects
-   @OneToMany(mappedBy = "mainCategory", fetch = FetchType.EAGER)
-   private List<FetchSubCategory> subCategory;
    
    Get your sub categories:
    
