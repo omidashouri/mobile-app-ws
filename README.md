@@ -570,5 +570,45 @@ d:\apache-tomcat-9.0.30\webapps\manager\WEB-INF\web.xml
         
   -----------------------
   
+-Isolation level:
+	-Durability: from underlying database
+	-Read_Uncommitted: read uncommitted changes
+	-Read_Committed: read only committed changes
+	-Repeatable_Read: read identical values multiple times
+	-Serializable: read identical rows multiple times
+
+  -----------------------
+  
+ -@Transactional(propagation=
+ 	-Propagation.Required: code always run in a transaction. (default)
+ 	-Propagation.REQUIRES_NEW: code will always run in a new transaction
+ 	-Propagation.Never: a method should not run in transaction
+ 	
+ -@Transactional(isolation=
+ 	-how data is available too other users or systems
+ 	-Isolation.READ_UNCOMMITTED: always dirty read
+ 	-Isolation.READ_COMMITTED: does not allow dirty read
+ 	-Isolation.REPEATABLE_READ: result always the same if row read twice
+ 	-Isolation.SERIALIZABLE: perform all transactions in a sequence
+ 	
+ @Transactional(Timeout=5
+ 	-time out for the operation wrapped by the transaction
+ 	
+ @transactional(ReadOnly=true)
+ 	-transaction don't write back to database (default is false)
+ 	
+ @Transactional(rollbackFor=....,noRollbackFor=...,
+ 	-default is for unchecked exception
+ 	-example: Exception.class	
+ 
+ @Transactional(rollbackForClassName={"Exception"})
+ 	-define specific class name that should trigger rollback
+ 	
+ @Transactional(noRollbackFor=
+ 	-NoSuchElementException.class
+ 	-specify class name where rollbacks should not occure 
+  
+   -----------------------  
+    
   
   
