@@ -610,5 +610,13 @@ d:\apache-tomcat-9.0.30\webapps\manager\WEB-INF\web.xml
   
    -----------------------  
     
-  
+  Predicate<PeriodEntity> periodPredicate = 
+                        newPeriod->newPeriod.getId().equals(newPeriod);
+                        
+  periodEntities.stream()
+                .map(PeriodEntity::getPeriodWebService)
+                .filter(periodWebServiceEntities.stream().collect(Collectors.toSet())::contains)
+                .map(newPeriodEntities::add);
+                
+     -----------------------  
   
