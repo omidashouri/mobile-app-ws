@@ -620,3 +620,52 @@ d:\apache-tomcat-9.0.30\webapps\manager\WEB-INF\web.xml
                 
      -----------------------  
   
+  
+-----------------------
+
+SonarQube:
+
+--- D:\SonarQube\sonarqube-8.1.0.31237\conf\sonar.properties file:
+    --create user 'sonarqube' and schema 'sonarcube' in postgreSQL
+sonar.jdbc.username=sonarqube
+sonar.jdbc.password=123
+sonar.jdbc.url=jdbc:postgresql://localhost:5432/sonarqube?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance&useSSL=false
+sonar.web.javaAdditionalOpts=-server
+sonar.web.host=127.0.0.1
+
+--- D:\SonarQube\sonarqube-8.1.0.31237\conf\wrapper.conf file:
+wrapper.java.command=C:\Program Files\Java\jdk-11.0.2\bin\java
+
+
+(optional)--- D:\SonarQube\sonar-scanner-4.2.0.1873-windows\conf\sonar-scanner.properties:
+sonar.host.url=http://localhost:9000
+sonar.sourceEncoding=UTF-8
+sonar.projectVersion=1.0
+sonar.sources=src/main/java
+sonar.sourceEncoding=UTF-8
+sonar.language=java
+sonar.java.binaries=target/classes
+
+
+---(for remote server) /.m2/settings.xml:
+    --get 'sonar.login' code from sonarqube web by generating token.
+    --'sonar.jdbc.url' and 'sonar.jdbc.username' and 'sonar.jdbc.password' is not essential.
+
+<profiles>
+    <profile>
+        <id>sonar</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <properties>  
+            <sonar.jdbc.url>jdbc:postgresql://172.17.70.55/sonar</sonar.jdbc.url>                 
+            <sonar.jdbc.username>sonar</sonar.jdbc.username>
+            <sonar.jdbc.password>sonar</sonar.jdbc.password>   
+            <sonar.host.url>http://172.17.70.55:9000/</sonar.host.url>       
+            <sonar.login>54f3fda8b8eccc470b81c0015243e0115f9ac1bf</sonar.login>      
+        </properties>
+    </profile> 
+</profiles>
+
+
+-----------------------
