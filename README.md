@@ -85,17 +85,91 @@ Spring RESTful Web Services, Java, Spring Boot, Spring MVC and JPA
 -----------------------
 
 Spring Hateoas 1.0:
-
     changes:
         ResourceSupport -is now> RepresentationModel
         Resource -is now> EntityModel
         Resources -is now> CollectionModel
         PagedResources -is now> PagedModel
-        
+        ControllerLinkBuilder.linkTo -is now > WebMvcLinkBuilde.linkTo
+        ControllerLinkBuilder.methodOn -is now > WebMvcLinkBuilde.methodOn
+        EntityModel is use when Entity is not extending RepresentationModel
+        EntityLinks is another way for adding links in just spring MVC
+        RepresentationModelAssemblerSupport is another way for adding links use for all methods in controller
+        RepresentationModelProcessor is another way for adding links 
+       
     RepresentationModel:
         EntityModel -|> RepresentationModel
         CollectionModel -|> RepresentationModel
-        PagedModel -|> CollectionModel
+        PagedModel -|> CollectionModel    
+
+
+    notes:
+        -header set to application/hal+json
+        
+        -instead extending Entity from RepresentationModel we can use:
+            Item resource representation model:
+                Person person = new Person("Dave", "Matthews");
+                EntityModel<Person> model = new EntityModel<>(person);
+            Collection resource representation model:
+                Collection<Person> people = Collections.singleton(new Person("Dave", "Matthews"));
+                CollectionModel<Person> model = new CollectionModel<>(people);
+        
+        -import static org.sfw.hateoas.server.mvc.WebMvcLinkBuilder.*
+        
+        -response header values:
+                HttpHeaders headers = new HttpHeaders();
+                headers.setLocation(linkTo(PersonController.class).slash(person).toUri());
+                return new ResponseEntity<PersonModel>(headers, HttpStatus.CREATED);
+        
+        -Building links that point to methods:
+                Link link = linkTo(methodOn(PersonController.class).show(2L)).withSelfRel();
+                assertThat(link.getHref()).endsWith("/people/2");
+                better is:
+                public ResponseEntity<?> show(@PathVariable Integer id){
+                    Link link = linkTo(methodOn(PersonController.class).show(id)).withSelfRel();
+                return ...}
+        
+        -Affordances:
+            -Automatic: Connecting affordances to GET /employees/{id}
+                    @GetMapping("/employees/{id}")
+                    public EntityModel<Employee> findOne(@PathVariable Integer id) {                   
+                      Class<EmployeeController> controllerClass = EmployeeController.class;
+                      Link findOneLink = linkTo(methodOn(controllerClass).findOne(id)).withSelfRel(); 
+                      return new EntityModel<>(EMPLOYEES.get(id), //
+                          findOneLink //
+                              .andAffordance(afford(methodOn(controllerClass).updateEmployee(null, id))) 
+                              .andAffordance(afford(methodOn(controllerClass).partiallyUpdateEmployee(null, id)))); 
+                    }
+                    
+                    updateEmpoyee method that responds to PUT /employees/{id}:
+                            @PutMapping("/employees/{id}")
+                            public ResponseEntity<?> updateEmployee( //
+                                @RequestBody EntityModel<Employee> employee, @PathVariable Integer id)
+                                
+                    partiallyUpdateEmployee method that responds to PATCH /employees/{id}:
+                            @PatchMapping("/employees/{id}")
+                            public ResponseEntity<?> partiallyUpdateEmployee( //
+                                @RequestBody EntityModel<Employee> employee, @PathVariable Integer id)
+                                
+            -Manually: Building affordances manually
+                    var methodInvocation = methodOn(EmployeeController.class).all();
+                    var link = Affordances.of(linkTo(methodInvocation).withSelfRel())  
+                                      
+                        .afford(HttpMethod.POST)  //EmployeeController.newEmployee(…)
+                        .withInputAndOutput(Employee.class) 
+                        .withName("createEmployee")
+                                          
+                        .andAfford(HttpMethod.GET) //EmployeeController.search(…)
+                        .withOutput(Employee.class) 
+                        .addParameters(
+                            QueryParameter.optional("name"), 
+                            QueryParameter.optional("role")) 
+                        .withName("search")
+                                             
+                        .toLink();
+                    
+        -EntityLinks interface:
+             
 
 -----------------------
 
