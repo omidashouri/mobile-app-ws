@@ -169,8 +169,152 @@ Spring Hateoas 1.0:
                         .toLink();
                     
         -EntityLinks interface:
+             -EntityLinks links = …;
+              LinkBuilder builder = links.linkFor(Customer.class);
+              Link link = links.linkToItemResource(Customer.class, 1L)
+              
+             -EntityLinks based on Spring MVC controllers: @ExposesResourceFor(…)
+                    -@ExposesResourceFor(…):
+                             @Controller
+                             @ExposesResourceFor(Order.class) 
+                             @RequestMapping("/orders") 
+                             class OrderController {
+                             
+                               @GetMapping 
+                               ResponseEntity orders(…) { … }
+                             
+                               @GetMapping("{id}") 
+                               ResponseEntity order(@PathVariable("id") … ) { … }
+                             }
+                    -EntityLinks @EnableHypermediaSupport in your Spring MVC configuration:
+                             @Controller
+                             class PaymentController {
+                             
+                               private final EntityLinks entityLinks;
+                             
+                               PaymentController(EntityLinks entityLinks) { 
+                                 this.entityLinks = entityLinks;
+                               }
+                             
+                               @PutMapping(…)
+                               ResponseEntity payment(@PathVariable Long orderId) {
+                             
+                                 Link link = entityLinks.linkToItemResource(Order.class, orderId); 
+                                 …
+                               }
+                             }
+                    -EntityLinks API in detail:
+                             entityLinks.linkToItemResource(order, order.getId());
+                             
+                             Function<Order, Object> idExtractor = Order::getId; 
+                             entityLinks.linkToItemResource(order, idExtractor);
+                    -TypedEntityLinks:
+                             class OrderController {
+                             
+                               private final TypedEntityLinks<Order> links;
+                             
+                               OrderController(EntityLinks entityLinks) { 
+                                 this.links = entityLinks.forType(Order::getId); 
+                               }
+                             
+                               @GetMapping
+                               ResponseEntity<Order> someMethod(…) {
+                             
+                                 Order order = … // lookup order
+                             
+                                 Link link = links.linkToItemResource(order); 
+                               }
+                             }
+                    -EntityLinks as SPI:
+                            -Declaring a custom EntityLinks implementation:
+                            @Configuration
+                            class CustomEntityLinksConfiguration {
+                            
+                              @Bean
+                              MyEntityLinks myEntityLinks(…) {
+                                return new MyEntityLinks(…);
+                              }
+                            }
+                            
+             -Representation model assembler:
+                     -https://howtodoinjava.com/spring5/hateoas/spring-hateoas-tutorial/
+                     -representation model must be used in multiple places:
+                     -RepresentationModelAssemblerSupport:        
+                     class PersonModelAssembler extends RepresentationModelAssemblerSupport<Person, PersonModel> {
+                     
+                       public PersonModelAssembler() {
+                         super(PersonController.class, PersonModel.class);
+                       }
+                     
+                       @Override
+                       public PersonModel toModel(Person person) {
+                     
+                         PersonModel resource = createResource(person);
+                         // … do further mapping
+                         return resource;
+                       }
+                     }
+                      
+                      -then use the assembler to either assemble a RepresentationModel or a CollectionModel:
+                             
+                      Person person = new Person(…);
+                      Iterable<Person> people = Collections.singletonList(person);
+                      
+                      PersonModelAssembler assembler = new PersonModelAssembler();
+                      PersonModel model = assembler.toModel(person);
+                      CollectionModel<PersonModel> model = assembler.toCollectionModel(people);  
+        
+        -Representation Model Processors:
+                -tweak and adjust hypermedia representations after they have been assembled:
+                -You wish to add a link so the client can make payment, 
+                    but don’t want to mix details about your PaymentController into the OrderController:
+                 {
+                   "orderId" : "42",
+                   "state" : "AWAITING_PAYMENT",
+                   "_links" : {
+                     "self" : {
+                       "href" : "http://localhost/orders/999"
+                     }
+                   }
+                 }            
              
-
+                 -RepresentationModelProcessor:
+                      public class PaymentProcessor implements RepresentationModelProcessor<EntityModel<Order>> { 
+                        @Override
+                        public EntityModel<Order> process(EntityModel<Order> model) {
+                          model.add( 
+                              new Link("/payments/{orderId}").withRel(LinkRelation.of("payments")) 
+                                  .expand(model.getContent().getOrderId()));
+                          return model; 
+                        }
+                      }     
+                 
+                 -Register the processor with your application:
+                       @Configuration
+                       public class PaymentProcessingApp {
+                       
+                         @Bean
+                         PaymentProcessor paymentProcessor() {
+                           return new PaymentProcessor();
+                         }
+                       }
+                       
+                 -client receives this:
+                        {
+                          "orderId" : "42",
+                          "state" : "AWAITING_PAYMENT",
+                          "_links" : {
+                            "self" : {
+                              "href" : "http://localhost/orders/999"
+                            },
+                            "payments" : { 
+                              "href" : "/payments/42" 
+                            }
+                          }
+                        }  
+                        
+        -Using the LinkRelationProvider API:
+               
 -----------------------
 
 CONTROLLER:  public AddressRest getUserAddress
