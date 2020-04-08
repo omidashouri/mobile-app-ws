@@ -887,3 +887,35 @@ sonar.java.binaries=target/classes
 
 
 -----------------------
+
+
+useful codes:
+
+-- controller:
+    1)
+    List<Long> periodWebServiceIds = StreamSupport
+                     .stream(periodWebServiceFastDtoPages.spliterator(),false)
+                     .map(PeriodWebServiceFastDto::getId).collect(Collectors.toList());
+    
+    List<PeriodWebServiceDto> periodWebServiceDtos = periodWebServiceService
+                     .findAllPeriodWebServiceDtoById(periodWebServiceIds);
+    
+    Page<PeriodResponseOld> periodResponsesPages = PageableExecutionUtils
+            .getPage(periodWebServiceDtoPeriodResponseOldMapper
+                    .PeriodWebServiceDtosToPeriodResponses(periodWebServiceDtos,
+                            new CycleAvoidingMappingContext()),
+                    paperiodPageable,
+                    periodWebServiceFastDtoPages::getTotalElements);
+    
+    2)
+                  
+-- services:
+    1)
+    
+    
+-- repository:
+    1)
+    
+
+
+-----------------------
