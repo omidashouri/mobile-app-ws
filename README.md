@@ -911,11 +911,100 @@ useful codes:
                   
 -- services:
     1)
+    List<PeriodEntity> periodEntities = StreamSupport
+                    .stream(periodRepository.findAllById(periodIds).spliterator(),false)
+                    .collect(Collectors.toList());
+    
+    2)
+    public List<PeriodEntity> findNewPeriodNotInPeriodWebService(List<PeriodWebServiceEntity> periodWebServiceEntities) {
+            List<PeriodEntity> newPeriods = new ArrayList<>();
+            List<Long> oldPeriodIds = periodWebServiceEntities
+                    .stream()
+                    .map(PeriodWebServiceEntity::getPeriodId)
+                    .collect(Collectors.toList());  
+            List<PeriodOnly> allPeriodOnlyList = periodRepository.findBy();
+            // set Id Entity as Key in Map<Long,List<Entity>> from List<Entity>
+            Map<Long, List<PeriodOnly>> allPeriodOnlyMap = allPeriodOnlyList
+                    .stream()
+                    .collect(Collectors.groupingBy(PeriodOnly::getId));
+            // compare List<Entity> with Map<Long,List<Entity>> and remove same Entityes
+            // also can use as compare two List<Entity>
+            Map<Long, List<PeriodOnly>> newPeriodOnlyMap = allPeriodOnlyMap
+                    .entrySet()
+                    .stream()
+                    .filter(Objects::nonNull)
+                    .filter(e -> !oldPeriodIds.stream().collect(Collectors.toSet()).contains(e.getKey()))
+                    .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+            // get List<Entity> from map<Long,List<Entity>>
+            List<PeriodOnly> newPeriodOnlyList = newPeriodOnlyMap
+                    .values()
+                    .stream()
+                    .flatMap(List::stream)
+                    .collect(Collectors.toList());
+            newPeriods = periodOnlyMapperOld
+                    .PeriodOnliesToPeriodEntities(newPeriodOnlyList, new CycleAvoidingMappingContext())
+            return newPeriods;
+        }
+        
+    3)        
+     oldPeriods = periodRepository.findByIdIn(periodIds);
+     oldPeriods = periodRepository.findPeriodEntitiesByIdIn(periodIds);
+     oldPeriods = periodRepository.findByCreatorNotIn(personEntities);
+     // Ids that are not in PeriodWebService but search among data that selected query get from database
+     newPeriods = periodRepository.findAllByPeriodWebService_IdNotIn(periodWebServiceIds);
+    
+    4)
+    // Page<Entity> to Page<EntityDto>
+    Page<PeriodEntity> periodPageable = periodRepository.findAll(pageable);
+    Page<PeriodDto> periodDtoPageable = periodPageable
+                    .map(period -> periodMapper.PeriodEntityToPeriodDto(period, new CycleAvoidingMappingContext()));
+
+    5)
+    // Iterable<Entity> to List<Entity>
+    List<PeriodEntity> periodEntities = StreamSupport
+                        .stream(periodRepository.findAll().spliterator(), false)
+                        .collect(Collectors.toList());
+                        
+    6)
+    // compare two List<Entity> and remove Entitys that have property which is equal in both
+    periodEntities
+                .stream()
+                .map(PeriodEntity::getPeriodWebService)
+                .collect(Collectors.toList())
+                .removeAll(periodWebServiceEntities);
+    
+    list2.stream().map(list2->list2.property)
+                        .filter(list1.stream().map(list1->list1.propery)
+                        .collect(Collectors.toSet())::contains)
+    
+    7)
+    // get 20 recored of list
+    List<PeriodWebServiceEntity> temp20 = newPeriodWebServiceEntities
+                    .stream().limit(20).collect(Collectors.toList());
+    
+    8)
+    // sort list by id
+    lis1.sort(Comparator.comparing(list1::getId));
+    
+    9)
     
     
+        
 -- repository:
     1)
+    @EntityGraph(value = "PeriodEntity.periodWebServiceEntity", type = EntityGraph.EntityGraphType.FETCH)
+    List<PeriodEntity> findAllByPeriodWebService_IdIn(List<Long> periodWebServiceId);
     
-
+    @EntityGraph(value = "PeriodEntity.periodWebServiceEntity", type = EntityGraph.EntityGraphType.FETCH)
+    List<PeriodEntity> findAllByPeriodWebService_IdNotIn(List<Long> periodWebServiceId);
+    
+    2)
+    @EntityGraph(value = "PeriodWebServiceEntity.periodWebServicePeriodFastGraph",type = EntityGraph.EntityGraphType.FETCH)
+    @Query(value = "select pw from PeriodWebServiceEntity pw left join pw.period p ",
+            countQuery = "select count(pw) from PeriodWebServiceEntity pw left join pw.period p")
+    Page<PeriodWebServiceEntity> findBy(Pageable pageable);
+    
+    3)
+    
 
 -----------------------
