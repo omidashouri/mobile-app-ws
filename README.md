@@ -986,8 +986,14 @@ useful codes:
     // sort list by id
     lis1.sort(Comparator.comparing(list1::getId));
     
-    9)
-    
+    9)Iterate over Pageable:
+    PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(),pageable.getPageSize());
+    Page<Entity> entityPages = entiryService.findAll(pageable);
+    while (!entityPages.isEmpty()){
+       entityPages = entityService.findAll(pageRequest);
+       ...do something
+       pageRequest = (PageRequest) pageRequest.next();
+     }
     
         
 -- repository:
@@ -1005,6 +1011,31 @@ useful codes:
     Page<PeriodWebServiceEntity> findBy(Pageable pageable);
     
     3)
+    Iterable<Entity> findAllByDeleteStatusIsNotNull;
     
+    4)Select All with pageable:
+    Pageable wholePage = Pageable.unpaged();
+    entityRepository.findAll(wholePage);
+    
+    5)
+    //null check before getting a stream 
+    //(method that return a List that might be null)
+    <T> Stream<T> getStream(List<T> list) {
+        return Optional.ofNullable(list).map(List::stream).orElseGet(Stream::empty);
+    }
+    //If the argument is a collection, we can then flatMap to turn it into a stream:
+    <T> Stream<T> fromNullableCollection(Collection<? extends T> collection) {
+        return Stream.ofNullable(collection).flatMap(Collection::stream);
+    }
+    //Example:
+    Optional.ofNullable(userList)
+                    .orElseGet(Collections::emptyList)
+                    .stream()
+                    .map(user -> user.getName())
+                    .collect(toList());
+                    
+    6)
+    
+
 
 -----------------------
