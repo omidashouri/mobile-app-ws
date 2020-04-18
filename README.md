@@ -994,6 +994,35 @@ useful codes:
        ...do something
        pageRequest = (PageRequest) pageRequest.next();
      }
+     
+    10)Map vs flatMap:
+     flatMap: input of Streams to a Stream
+     example:
+        List<List<String>> to List<String>
+        listA              to listB 
+            listA.stream().flatMap(Collection::stream).collect(Collectors.toList());
+            -instead we should use forEach: listA.stream().forEach(listB::addAll)
+            
+    11)
+    Negate method Reference:
+    Predicate.not( … )
+    example: s.filter(Predicate.not(String::isEmpty))
+             s.filter(Predicate.not(listX::contains))
+             
+     .map(Stream.of(PersonEntity::getPersonWebServiceEntity).setPersonPublicId(this.generatePublicId()))
+    
+    
+    
+    List<PersonWebServiceEntity> newPersonWebServices = 
+                    newPersons
+                            .stream()
+                            .filter(Objects::nonNull)
+                            .map(PersonEntity::getPersonWebServiceEntity)
+                            .filter(Objects::nonNull)
+                            .peek(p->p.setPersonPublicId(this.generatePublicId()))
+                    .collect(Collectors.toList());
+    
+    
     
         
 -- repository:
