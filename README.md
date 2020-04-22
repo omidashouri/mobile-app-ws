@@ -1022,7 +1022,10 @@ useful codes:
                             .peek(p->p.setPersonPublicId(this.generatePublicId()))
                     .collect(Collectors.toList());
     
-    
+    12)
+    Stream<List<Entity>> to List<Entity>
+            listA         to    listB
+    example: listB = listA.flatMap(List::stream).collect(Collectors.toList());
     
         
 -- repository:
