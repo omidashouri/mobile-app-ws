@@ -985,6 +985,15 @@ useful codes:
     8)
     // sort list by id
     lis1.sort(Comparator.comparing(list1::getId));
+    lis1.sort(Comparator.comparing(list1::getId)).reversed;
+    -other example:
+        Collections.sort(testList);
+        Collections.reverse(testList);
+    -other example:
+        Collections.sort(testList, Collections.reverseOrder());
+     -other example:
+        lis1.stream().distinct().sorted(Comparator.comparing(PersonEntity::getId,
+                            Comparator.nullsFirst(Comparator.naturalOrder())));
     
     9)Iterate over Pageable:
     PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(),pageable.getPageSize());
@@ -1026,6 +1035,23 @@ useful codes:
     Stream<List<Entity>> to List<Entity>
             listA         to    listB
     example: listB = listA.flatMap(List::stream).collect(Collectors.toList());
+    
+    13)
+    Distinct by property in List<Entity>:
+    example:
+    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
+    }
+    persons.stream().filter(distinctByKey(Person::getName));
+    -
+    other example:
+    persons.collect(Collectors.toMap(Person::getName, p -> p, (p, q) -> p)).values();
+    -
+    other Example:
+    return new ArrayList(new HashSet(recipients));
+    
+    14)
     
         
 -- repository:
