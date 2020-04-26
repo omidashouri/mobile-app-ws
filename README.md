@@ -1052,7 +1052,15 @@ useful codes:
     return new ArrayList(new HashSet(recipients));
     
     14)
-    
+    Stream<Object> add to ArrayList:
+    -ArrayList<T> arrayList = stream.collect(Collectors .toCollection(ArrayList::new));
+    -
+    other example:
+    listA.stream().forEachOrdered(listB::add);
+    -
+    other example:
+    listA.stream().map(listB::add);
+        
         
 -- repository:
     1)
