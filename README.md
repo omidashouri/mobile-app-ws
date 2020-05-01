@@ -579,7 +579,28 @@ d:\apache-tomcat-9.0.30\webapps\manager\WEB-INF\web.xml
       private Customer customer;
       …
   }
+  -----------------------
   
+  On Delete Cascade:
+    - mean if referenced record (ID or ID in table PERSON) delete then delete child record (PERSON_ID or PERSON_ID in CONTACT)
+    - remember, no body care about child record, what is important is parent record, because we are referencing to it
+    - ON DELETE of parent CASCADE [by deleting] here. deletes of the parent get cascaded.
+    -there are 5 different referential actions:
+     1.CASCADE, 2.RESTRICT, 3.NO ACTION, 4.SET NULL, 5.SET DEFAULT
+     1.CASCADE:
+         ON DELETE CASCADE means that if the parent record is deleted, any child records are also deleted. This is not a good idea in my opinion. You should keep track of all data that's ever been in a database, although this can be done using TRIGGERs. (However, see caveat in comments below).
+         ON UPDATE CASCADE means that if the parent primary key is changed, the child value will also change to reflect that. Again in my opinion, not a great idea. If you're changing PRIMARY KEYs with any regularity (or even at all!), there is something wrong with your design. Again, see comments.
+         ON UPDATE CASCADE ON DELETE CASCADE means that if you UPDATE OR DELETE the parent, the change is cascaded to the child. This is the equivalent of ANDing the outcomes of first two statements.
+     2.RESTRICT:
+         RESTRICT means that any attempt to delete and/or update the parent will fail throwing an error. This is the default behaviour in the event that a referential action is not explicitly specified.
+         For an ON DELETE or ON UPDATE that is not specified, the default action is always RESTRICT`.
+     3.NO ACTION:
+        NO ACTION: From the manual. A keyword from standard SQL. In MySQL, equivalent to RESTRICT. The MySQL Server rejects the delete or update operation for the parent table if there is a related foreign key value in the referenced table. Some database systems have deferred checks, and NO ACTION is a deferred check. In MySQL, foreign key constraints are checked immediately, so NO ACTION is the same as RESTRICT.
+     4.SET NULL:
+        SET NULL - again from the manual. Delete or update the row from the parent table, and set the foreign key column or columns in the child table to NULL. This is not the best of ideas IMHO, primarily because there is no way of "time-travelling" - i.e. looking back into the child tables and associating records with NULLs with the relevant parent record - either CASCADE or use TRIGGERs to populate logging tables to track changes (but, see comments).
+     5.SET DEFAULT:
+        SET DEFAULT. Yet another (potentially very useful) part of the SQL standard that MySQL hasn't bothered implementing! Allows the developer to specify a value to which to set the foreign key column(s) on an UPDATE or a DELETE. InnoDB and NDB will reject table definitions with a SET DEFAULT clause.
+     
   -----------------------
   
   Self Join:
