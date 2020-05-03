@@ -1105,3 +1105,14 @@ useful codes:
 
 
 -----------------------
+
+Lombok:
+    -@RequiredArgsConstructor:
+        when use it, one argument (parameter) is required for each filed. 
+        if fields are initialized with 'final' or '@NonNull' they are created with no-args (parameters).
+    -IMPORTANT:  hibernate and Service Provider Interface require the no-args constructor.
+        so, always in serviceImpl or Hibernate use 'private final' for fields or we get null point exception in persist.
+        hibernate need no-arg constructor because in find or cast syntax do not know which one we want for creating.
+        
+
+-----------------------
