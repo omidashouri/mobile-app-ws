@@ -1137,3 +1137,28 @@ Lombok:
         
 
 -----------------------
+
+@RequestParam:
+    -makes Spring to map request parameters from the GET/POST request to your method argument.
+    -example:
+        http://testwebaddress.com/getInformation.do?city=Sydney&country=Australia
+        public String getCountryFactors(@RequestParam(value = "city") String city, 
+                            @RequestParam(value = "country") String country){ }
+                            
+     
+@RequestBody:
+    -POST/PUT Request
+    -makes Spring to map entire request to a model class and from there you can retrieve or set values from its getter and setter methods.
+    -example:
+        http://testwebaddress.com/getInformation.do
+        JSON data:
+            {
+               "city": "Sydney",
+               "country": "Australia"
+            }
+            
+        public String getCountryFactors(@RequestBody Country countryFacts)
+            {
+                countryFacts.getCity();
+                countryFacts.getCountry();
+            }
