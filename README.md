@@ -1162,3 +1162,25 @@ Lombok:
                 countryFacts.getCity();
                 countryFacts.getCountry();
             }
+            
+            
+-----------------------
+
+    -important security classes:
+    
+    -org.springframework.security.authentication.AbstractAuthenticationToken :
+        for AbstractAuthenticationToken::authorities.
+    
+    -org.springframework.security.access.intercept.AbstractSecurityInterceptor :
+        for InterceptorStatusToken::object
+   
+    -org.springframework.security.access.vote.AffirmativeBased :
+        for decide::voter
+
+    -org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider :
+        for Authentication
+    
+    
+-----------------------
+
+    
