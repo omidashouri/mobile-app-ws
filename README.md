@@ -1183,4 +1183,9 @@ Lombok:
     
 -----------------------
 
+    Exception:
+    -UnsupportedOperationException when trying to remove/add an element from/to a List
+    -Arrays.asList returning a fixed-size list, So you can't add/remove to/from it. and You can't structurally modify the List.
+    -use : new ArrayList<>(Arrays.asList(new User(...), new User(...)))
     
+-----------------------
