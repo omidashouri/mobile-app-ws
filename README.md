@@ -1189,3 +1189,34 @@ Lombok:
     -use : new ArrayList<>(Arrays.asList(new User(...), new User(...)))
     
 -----------------------
+
+MVC: Response Redirect:
+    -public ResponseEntity<?> afterPaymentResponse(HttpServletRequest request)
+    -:_
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", "IMI eyJhb");
+        String baseUrl = ServletUriComponentsBuilder
+                            .fromRequestUri(request)
+                                .replacePath(null)
+                                    .build().toUriString();
+                                    
+            request.getLocalName();
+            // or this
+            request.getLocalAddr();
+            URI _redirectUri = null;
+            _redirectUri = new URI("http://foo.example.com/webpageC");
+            httpHeaders.setLocation(_redirectUri);
+            return new ResponseEntity<>(httpHeaders, HttpStatus.FOUND);
+    -_:
+    -
+    -:_
+        return ResponseEntity.ok()
+                        .header("Authorization","IMI eyJhb")
+                        .body(MYBODYCLASS);
+    -_:
+    -
+    -public String afterPaymentResponse()
+    :_
+        String returnValue = "redirect:/api/v1/contacts/nationalCode/0000000000";
+        return returnValue;
+    _:
