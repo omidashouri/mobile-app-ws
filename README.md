@@ -1163,6 +1163,17 @@ Lombok:
                 countryFacts.getCountry();
             }
             
+@PathVariable:
+    -obtain some placeholder from the URI (Spring call it an URI Template) 
+    -example:
+        http://localhost:8080/MyApp/user/1234/invoices?date=12-05-2013
+        @RequestMapping(value="/user/{userId}/invoices", method = RequestMethod.GET)
+        public List<Invoice> listUsersInvoices(
+            @PathVariable("userId") int user,
+            @RequestParam(value = "date", required = false) Date dateOrNull) {
+              ...
+            }
+    
             
 -----------------------
 
@@ -1210,9 +1221,77 @@ MVC: Response Redirect:
     -_:
     -
     -:_
+        return ResponseEntity
+            .status(HttpStatus.FOUND)
+            .header(HttpHeaders.LOCATION,
+                    "http://ashouri-pc:8080/edu-imi-ws/...?operationStatus=success")
+            .build();
+            
+        -in the above way we could only get parameter in destination from @RequestParam like bellow:
+            @RequestParam(value = "operationStatus", required = false) String operationStatus,
+    -_:
+    -
+    -:_
+        -in the following way we get value from flash attributes(addFlashAttribute() or addAttribute()):
+        -Send Method:
+            make return String as bellow: 
+                return "redirect:/...";
+            -or
+            for RedirectAttributes: the method returns a redirect view name or a RedirectView to implement
+                we should use string as return "redirect:/foo/bar" or RedirectView like bellow:
+            @RequestMapping(value = "/bar", method = RequestMethod.POST)
+            public RedirectView handlePost(RedirectAttributes redirectAttrs) {
+              redirectAttrs.addFlashAttributes("some", "thing");
+              return new RedirectView("/foo/bar", true);
+            }
+        -    
+        -Receive Method:
+            @RequestMapping(value = "/bar", method = RequestMethod.GET)
+            public ModelAndView handleGet(Model model) {
+              String some = (String) model.asMap().get("some");
+              // do the job
+            }
+            -or
+            @RequestMapping(value = "/bar", method = RequestMethod.GET)
+            public ModelAndView handleGet(HttpServletRequest request) {
+              Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+              if (inputFlashMap != null) {
+                String some = (String) inputFlashMap.get("some");
+                // do the job
+              }
+            }
+            -or
+            for RedirectAttributes:
+                @RequestMapping(value = "/bar")
+                public void handleBar(@ModelAttribute("some") String some)
+                {
+                    System.out.println("some=" + some);
+                }
+            
+    -_:
+    -
+    -:_
         return ResponseEntity.ok()
                         .header("Authorization","IMI eyJhb")
                         .body(MYBODYCLASS);
+    -_:
+    -
+    -:_
+        @RequestMapping(value = "/rm1", method = RequestMethod.POST)
+        public String rm1(Model model,RedirectAttributes rm) {
+            System.out.println("Entered rm1 method ");
+            rm.addFlashAttribute("modelkey", "modelvalue");
+            rm.addAttribute("nonflash", "nonflashvalue");
+            model.addAttribute("modelkey", "modelvalue");
+            return "redirect:/rm2.htm";
+        }
+        
+        @RequestMapping(value = "/rm2", method = RequestMethod.GET)
+        public String rm2(Model model,HttpServletRequest request) {
+            Map md = model.asMap().get(modelKey);
+            java.util.Enumeration<String> reqEnum = request.getParameterNames();
+            return "controller2output"
+        }
     -_:
     -
     -public String afterPaymentResponse()
@@ -1220,3 +1299,88 @@ MVC: Response Redirect:
         String returnValue = "redirect:/api/v1/contacts/nationalCode/0000000000";
         return returnValue;
     _:
+    -
+    -:_
+    1.Redirect With the RedirectView:
+        @Controller
+        @RequestMapping("/")
+        public class RedirectController {
+             
+            @GetMapping("/redirectWithRedirectView")
+            public RedirectView redirectWithUsingRedirectView(
+              RedirectAttributes attributes) {
+                attributes.addFlashAttribute("flashAttribute", "redirectWithRedirectView");
+                attributes.addAttribute("attribute", "redirectWithRedirectView");
+                return new RedirectView("redirectedUrl");
+            }
+        }
+    
+    2.Redirect With the Prefix redirect:
+        @Controller
+        @RequestMapping("/")
+        public class RedirectController {
+             
+            @GetMapping("/redirectWithRedirectPrefix")
+            public ModelAndView redirectWithUsingRedirectPrefix(ModelMap model) {
+                model.addAttribute("attribute", "redirectWithRedirectPrefix");
+                return new ModelAndView("redirect:/redirectedUrl", model);
+            }
+        }
+        
+    3.Forward With the Prefix forward:
+        @Controller
+        @RequestMapping("/")
+        public class RedirectController {
+             
+            @GetMapping("/forwardWithForwardPrefix")
+            public ModelAndView redirectWithUsingForwardPrefix(ModelMap model) {
+                model.addAttribute("attribute", "forwardWithForwardPrefix");
+                return new ModelAndView("forward:/redirectedUrl", model);
+            }
+        }
+        
+    4.Attributes With the RedirectAttributes:
+        @GetMapping("/redirectWithRedirectAttributes")
+        public RedirectView redirectWithRedirectAttributes(RedirectAttributes attributes) {
+          
+            attributes.addFlashAttribute("flashAttribute", "redirectWithRedirectAttributes");
+            attributes.addAttribute("attribute", "redirectWithRedirectAttributes");
+            return new RedirectView("redirectedUrl");
+        }
+        
+        @GetMapping("/redirectedUrl")
+        public ModelAndView redirection(
+          ModelMap model, 
+          @ModelAttribute("flashAttribute") Object flashAttribute) {
+              
+             model.addAttribute("redirectionAttribute", flashAttribute);
+             return new ModelAndView("redirection", model);
+         }
+    
+    5.Redirecting an HTTP POST Request:
+        @PostMapping("/redirectPostToPost")
+        public ModelAndView redirectPostToPost(HttpServletRequest request) {
+            request.setAttribute(
+              View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
+            return new ModelAndView("redirect:/redirectedPostToPost");
+        }
+        
+        @PostMapping("/redirectedPostToPost")
+        public ModelAndView redirectedPostToPost() {
+            return new ModelAndView("redirection");
+        }
+       
+    -_:
+    -
+    -Attention:
+        -status codes 301 (Moved Permanently) and 302 (Found):
+            allow the request method to be changed from POST to GET. 
+        
+        -status codes 307 (Temporary Redirect) and 308 (Permanent Redirect):
+            status codes that don't allow the request method to be changed from POST to GET.
+        
+    -
+    
+
+-----------------------
+
