@@ -1379,8 +1379,29 @@ MVC: Response Redirect:
         -status codes 307 (Temporary Redirect) and 308 (Permanent Redirect):
             status codes that don't allow the request method to be changed from POST to GET.
         
-    -
-    
-
 -----------------------
 
+@ModelAttribute vs  @RequestParam:
+    -if you have any binding activities from form to a model class
+        like Person->name then use @ModelAttribute("person") Person person
+        and if there is no biding @RequestParam("name")
+    -example:
+    -:_
+        <form:form method="POST" action="/spring-mvc-basics/addEmployee" 
+          modelAttribute="employee">
+            <form:label path="name">Name</form:label>
+            <form:input path="name" />
+            <form:label path="id">Id</form:label>
+            <form:input path="id" />
+            <input type="submit" value="Submit" />
+        </form:form>
+        @RequestMapping(value = "/addEmployee", method = RequestMethod.POST)
+        public String submit(@ModelAttribute("employee") Employee employee) {
+            model.addAttribute("name", employee.getName());
+            model.addAttribute("id", employee.getId());
+            return "employeeView";
+        }
+        
+-----------------------
+
+        
