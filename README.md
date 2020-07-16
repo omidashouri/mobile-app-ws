@@ -1081,6 +1081,14 @@ useful codes:
     -
     other example:
     listA.stream().map(listB::add);
+    
+    15)
+    List<Entiry> to List<EntityDto>
+    ListA        to     ListADto
+    -:_
+        List<A> a = aDto.findAll();
+        List<ADto> aDto = a.stream().map(u->new ADto(a.getId(),a.getName())).collect(Collectors.toList());
+    -_:
         
         
 -- repository:
