@@ -1422,7 +1422,7 @@ Mapstruct:
         -example:
             @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     
-    -ignoreStrategy:
+    -ignoreStrategy:(DEPRACATED)
         -@Mapping(ignoreStrategy=...)
         -ALWAYS (as true)
         -NEVER (as false)
@@ -1463,7 +1463,8 @@ Mapstruct:
             void update(AmcPackageRequest amcPackageRequest, @MappingTarget AmcPackage amcPackage);
         -_:
         
-     -
+     -java Expression updateDate:
+         @Mapping(target = "updatedTime", expression = "java( java.time.LocalDateTime.now() )")})
 
 -----------------------
 
