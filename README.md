@@ -1412,4 +1412,62 @@ MVC: Response Redirect:
         
 -----------------------
 
+Mapstruct:
+    
+    -NullValuePropertyMappingStrategy:
+        -This strategy can be set on @Mapping, @BeanMapping, @Mapper or @MapperConfig in precedence order.
+        -SET_TO_NULL: If the source property is null or not present the target property is set to null
+        -SET_TO_DEFAULT: If the source property is null or not present the target property is set to default 
+        -IGNORE: If the source property is null or not present the target property is not set at all
+        -example:
+            @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
+    
+    -ignoreStrategy:
+        -@Mapping(ignoreStrategy=...)
+        -ALWAYS (as true)
+        -NEVER (as false)
+        -NULL_SOURCE (ignore if source value is null)
+            -:_
+                if (source.getValue() != null)
+                        target.setValue (source.getValue());
+            -_:
+        -NULL_TARGET (ignore if target value is null)
+            -:_
+                if (target.getValue() != null)
+                        target.setValue(source.getValue());
+            -_:
+            
+    -Java expressions:
+        -@Mapping( target="discount", expression="java( source.getRetailPrice() - source.getSalePrice())" )
+    
+    -@IterableMapping(qualifiedBy) or @IterableMapping(qualifiedByName) :
+        -You should use org.mapstruct.Named and not javax.inject.Named for this to work. 
+         You can also define your own annotation by using org.mapstruct.Qualifier
+        -:_
+         AssigmentFileDTO assigmentFileToAssigmentFileDTO(AssigmentFile assigmentFile);
+        
+         @IterableMapping(qualifiedByName="mapWithoutData")
+         List<AssigmentFileDTO> assigmentFilesToAssigmentFileDTOs(List<AssigmentFile> assigmentFiles);
+        
+         @Named("mapWithoutData")
+         @Mapping(target = "data", ignore = true)
+         AssignmentFileDto mapWithouData(AssignmentFile source)
+        -_:
+        
+    -The generated code for create method is fine, but in case of update, 
+     I want to set the properties in the target, 
+     only if they are not null in the source.
+        -:_
+            @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+                        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+            void update(AmcPackageRequest amcPackageRequest, @MappingTarget AmcPackage amcPackage);
+        -_:
+        
+     -
+
+-----------------------
+
+
+
+
         
