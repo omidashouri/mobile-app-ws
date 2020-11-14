@@ -1463,7 +1463,7 @@ Mapstruct:
             void update(AmcPackageRequest amcPackageRequest, @MappingTarget AmcPackage amcPackage);
         -_:
         
-     -java Expression updateDate:
+    -java Expression updateDate:
          @Mapping(target = "updatedTime", expression = "java( java.time.LocalDateTime.now() )")})
          
     -Java Expression (Inject Service)
@@ -1511,6 +1511,23 @@ Mapstruct:
                 }       
             
             }
+            
+    -Inject Service with @Context:
+        -not working in mapstruct version 1.4.1
+        -@Mapper(componentModel = "spring")
+         public interface ContactResponseContactDtoMapper{
+            
+            @AfterMapping
+            default void handleDtoEntity_Ids(ContactResponse contactResponse,
+                                                    @MappingTarget ContactDto contactDto,
+                                                    @Context AccountService accountService) {
+                
+                if(contactResponse.getAccountPublicId()!=null){
+                    AccountEntity account= accountService
+                            .findAccountByAccountPublicId(contactResponse.getContactPublicId());
+                }
+            }
+         }
             
     -Mapper inside Other Mapper:
         -@Mapper(componentModel="spring", uses={AccountDtoMapper.class})
