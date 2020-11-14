@@ -1465,6 +1465,55 @@ Mapstruct:
         
      -java Expression updateDate:
          @Mapping(target = "updatedTime", expression = "java( java.time.LocalDateTime.now() )")})
+         
+    -Java Expression (Inject Service)
+        @Mapper(componentModel = "spring")
+        public abstract class ContactResponseContactDtoMapper{
+            
+                AccountService accountService;
+                @Autowired
+                public void setAccountService(AccountService accountService) {
+                    this.accountService = accountService;
+                }
+                
+                @Mappings({
+                    @Mapping(target = "accountDto", source = "accountPublicId",
+                                        defaultExpression = "java(accountService
+                                            .findAccountDtoByAccountPublicId(contactResponse.getAccountPublicId()))")
+                    })
+                abstract ContactDto toContactDto(ContactResponse contactResponse, @Context CycleAvoidingMappingContext context);
+                
+                AccountDto map(String accountPublicId){
+                        AccountDto accountDto = new AccountDto();
+                        accountDto = accountService.findAccountDtoByAccountPublicId(accountPublicId);
+                        return accountDto;
+                    }
+        }
+        
+    -@AfterMapping: Use Injected Service
+        -@Mapper(componentModel = "spring")
+            public abstract class ContactResponseContactDtoMapper{
+            
+                    AccountService accountService;
+                    @Autowired
+                    public void setAccountService(AccountService accountService) {
+                        this.accountService = accountService;
+                    }
+                    
+            @AfterMapping
+                public void handleDtoEntity_Ids(ContactResponse contactResponse,
+                                                        @MappingTarget ContactDto contactDto
+                ) {
+                    if(contactResponse.getAccountPublicId()!=null){
+                        AccountEntity account= accountService
+                                .findAccountByAccountPublicId(contactResponse.getContactPublicId());
+                    }
+                }       
+            
+            }
+            
+    -Mapper inside Other Mapper:
+        -@Mapper(componentModel="spring", uses={AccountDtoMapper.class})
 
 -----------------------
 
