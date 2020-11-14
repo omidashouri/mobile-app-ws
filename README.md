@@ -1511,9 +1511,11 @@ Mapstruct:
                 }       
             
             }
+        -:we could not have Dto to entity and get error incompatible types
             
     -Inject Service with @Context:
         -not working in mapstruct version 1.4.1
+        -search use of @ObjectFactory in mapstruct
         -@Mapper(componentModel = "spring")
          public interface ContactResponseContactDtoMapper{
             
@@ -1531,6 +1533,32 @@ Mapstruct:
             
     -Mapper inside Other Mapper:
         -@Mapper(componentModel="spring", uses={AccountDtoMapper.class})
+        
+    -Inject Service with @DecoratedWith:
+        -@Mapper(unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE,
+          componentModel = "spring")
+         @DecoratedWith(FooMapperDecorator.class)
+         public interface FooMapper {
+             FooDTO map(Foo foo);
+         }
+        
+        -public abstract class FooMapperDecorator implements FooMapper{
+             @Autowired
+             @Qualifier("delegate")
+             private FooMapper delegate;
+         
+             @Autowired
+             private MyBean myBean;
+         
+             @Override
+             public FooDTO map(Foo foo) {
+                 FooDTO fooDTO = delegate.map(foo);
+                 fooDTO.setBar(myBean.getBar(foo.getBarId());
+                 return fooDTO;
+             }
+         }
+         
+        -Mapstruct will generate 2 classes and mark the FooMapper that extends FooMapperDecorator as the @Primary bean.
 
 -----------------------
 
