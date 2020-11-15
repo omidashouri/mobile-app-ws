@@ -1512,6 +1512,56 @@ Mapstruct:
             
             }
         -:we could not have Dto to entity and get error incompatible types
+    
+    -qualifiedByName: 
+            -implement the mapping through a method instead @AfterMapping
+            -:_
+             @Mapper
+             public interface OneMapper {
+                 @Mapping(target="id", source="one.id")
+                 @Mapping(target="qualified", qualifiedByName="checkQualifiedNamed")
+                 OneDto createOne (One one, @Context Integer projId, @Context String code);
+                 @Named("checkQualifiedNamed")
+                 default Boolean checkQualified (One one, @Context Integer projId, @Context String code) {
+                     if(one.getProjectId() == projId && one.getCode().equalsIgnoreCase(code)) {
+                         return Boolean.TRUE;
+                     }
+                     return Boolean.FALSE;                   
+                 }
+             }    
+            -_:
+            -
+            -:also could have"
+            -:_
+             @Mapper
+             public interface OneMapper {
+                 @Mapping(target="id", source="one.id")
+                 @Mapping(target="qualified", qualifiedByName="checkQualifiedNamed")
+                 OneDto createOne (One one, @Context Filter filter);
+                 @Named("checkQualifiedNamed")
+                 default Boolean checkQualified (One one, @Context Filter filter) {
+                     if(one.getProjectId() == filter.getProjId() 
+                                              && one.getVal() == filter.getVal() 
+                                                                 && one.getCode().equalsIgnoreCase(filter.getCode())) {
+                         return Boolean.TRUE;
+                     }
+                     return Boolean.FALSE;                   
+                 }
+             }
+             
+             public class Filter {  
+                 private final Integer projId;
+                 private final Integer val;
+                 private final String code;
+                 public Filter (Integer projId, Integer val, String code) {
+                     this.projId = projId;
+                     this.val = val;
+                     this.code = code;
+                 }
+                 //getters
+             }
+            -_:
+            -
             
     -Inject Service with @Context:
         -not working in mapstruct version 1.4.1
