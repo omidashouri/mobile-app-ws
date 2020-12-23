@@ -1641,5 +1641,8 @@ Reflection:
         setterMethod.invoke(myEntity,pd.getPropertyType().getDeclaredConstructor().newInstance());         
 
 
+    -
+        Arrays.stream(FieldUtils.getField(ContactEntity.class,"firstName",true)
+                            .getAnnotations()).toArray()[0].toString().contains("LAZY");
 ----------------------------------
         
