@@ -1612,7 +1612,34 @@ Mapstruct:
 
 -----------------------
 
+Reflection:
+
+    #New Class:
+    -
+        String dogClassName = "com.mypackage.bean.Dog";
+        Class<?> dogClass = Class.forName(dogClassName);
+
+    -
+        Class<?> clazz2 = (Class<?>) Introspector.getBeanInfo(ce.getClass())
+                                        .getPropertyDescriptors()
+                                        .getPropertyType()
+                                        .getDeclaredConstructor()
+                                        .newInstance();
+                                
+
+    #setProperty:
+    -
+        PropertyAccessor myAccessor = PropertyAccessorFactory
+                                            .forBeanPropertyAccess(myEntity); 
+        myAccessor.setPropertyValue(d.getName(), clazz);
+                              
+    -                                                                                                    
+        PropertyDescriptor pd : Introspector.getBeanInfo(ce.getClass()).getPropertyDescriptors()          
+        String setterName = pd.getWriteMethod().getName();                                     
+        Method setterMethod = ce.getClass().getDeclaredMethod(setterName,pd.getPropertyType());      
+        setterMethod.setAccessible(true);                                                            
+        setterMethod.invoke(myEntity,pd.getPropertyType().getDeclaredConstructor().newInstance());         
 
 
-
+----------------------------------
         
