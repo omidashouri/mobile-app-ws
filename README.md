@@ -1644,5 +1644,160 @@ Reflection:
     -
         Arrays.stream(FieldUtils.getField(ContactEntity.class,"firstName",true)
                             .getAnnotations()).toArray()[0].toString().contains("LAZY");
+                            
+                            
+    -Class Names:
+        -example at last
+        1)
+            Object goat = new Goat("goat");
+            Class<?> clazz = goat.getClass();
+         
+        2)
+            Class<?> clazz = Class.forName("com.baeldung.reflection.Goat");
+         
+    -Class Modifiers:
+        1)
+            Class<?> goatClass = Class.forName("com.baeldung.reflection.Goat");
+            int goatMods = goatClass.getModifiers();
+            
+    -Package Information:
+        1)
+            Goat goat = new Goat("goat");
+            Class<?> goatClass = goat.getClass();
+            Package pkg = goatClass.getPackage();
+            
+    -Super Class:
+        1)
+            Goat goat = new Goat("goat");
+            Class<?> goatClass = goat.getClass();
+            Class<?> goatSuperClass = goatClass.getSuperclass();
+            
+    -Implemented Interfaces:
+        1)
+            Class<?> goatClass = Class.forName("com.baeldung.reflection.Goat");
+            Class<?>[] goatInterfaces = goatClass.getInterfaces();
+            
+    -Constructors, Methods, and Fields:
+        1)
+            Class<?> goatClass = Class.forName("com.baeldung.reflection.Goat");
+            Constructor<?>[] constructors = goatClass.getConstructors();
+     
+        2)
+            Class<?> animalClass = Class.forName("com.baeldung.reflection.Animal");
+            Field[] fields = animalClass.getDeclaredFields();
+            List<String> actualFields = getFieldNames(fields);  
+              
+        3)
+            Class<?> animalClass = Class.forName("com.baeldung.reflection.Animal");
+            Method[] methods = animalClass.getDeclaredMethods();
+            
+    -Inspecting Constructors
+        1)
+            Class<?> birdClass = Class.forName("com.baeldung.reflection.Bird");
+            Constructor<?> cons1 = birdClass.getConstructor();
+            Constructor<?> cons2 = birdClass.getConstructor(String.class);
+            
+            Bird bird1 = (Bird) cons1.newInstance();
+            Bird bird2 = (Bird) cons2.newInstance("Weaver bird");
+            
+    -Inspecting Fields:
+        1)getFields() method returns all accessible public fields of the class:
+            Class<?> birdClass = Class.forName("com.baeldung.reflection.Bird");
+            Field[] fields = birdClass.getFields();
+            Field field = birdClass.getField("CATEGORY");
+            
+        2)getDeclaredFields() method inspect private fields declared in the class:
+             Class<?> birdClass = Class.forName("com.baeldung.reflection.Bird");
+            Field[] fields = birdClass.getDeclaredFields();
+            
+        3)To be able to get the value of a field, we must first set it's accessible by 
+        calling setAccessible method on the Field object and pass boolean true:
+            Class<?> birdClass = Class.forName("com.baeldung.reflection.Bird");
+            Bird bird = (Bird) birdClass.getConstructor().newInstance();
+            Field field = birdClass.getDeclaredField("walks");
+            field.setAccessible(true);
+            
+        4)Field objects when it is declared as public static, 
+        then we don't need an instance of the class containing them, 
+        we can just pass null in its place and still obtain the default value of the field:
+            Class<?> birdClass = Class.forName("com.baeldung.reflection.Bird");
+            Field field = birdClass.getField("CATEGORY");
+            field.setAccessible(true);
+            assertEquals("domestic", field.get(null));
+            
+    -Inspecting Methods:
+        1)invoke methods at runtime and pass them their required parameters,
+        getMethods method returns an array of all public methods of the class and superclasses:
+        
+            Class<?> birdClass = Class.forName("com.baeldung.reflection.Bird");
+            Method[] methods = birdClass.getMethods();
+            List<String> methodNames = getMethodNames(methods);
+            
+            Class<?> birdClass = Class.forName("com.baeldung.reflection.Bird");
+            List<String> actualMethodNames
+              = getMethodNames(birdClass.getDeclaredMethods());
+            
+            Bird bird = new Bird();
+            Method walksMethod = bird.getClass().getDeclaredMethod("walks");
+            Method setWalksMethod = bird.getClass().getDeclaredMethod("setWalks", boolean.class);
+            
+        2)invoke a method at runtime:
+            Class<?> birdClass = Class.forName("com.baeldung.reflection.Bird");
+            Bird bird = (Bird) birdClass.getConstructor().newInstance();
+            Method setWalksMethod = birdClass.getDeclaredMethod("setWalks", boolean.class);
+            setWalksMethod.invoke(bird, true);
+            Method walksMethod = birdClass.getDeclaredMethod("walks");
+            boolean walks = (boolean) walksMethod.invoke(bird);
+    
+    -examples:
+        public interface Eating {
+            String eats();
+        }
+        
+        public abstract class Animal implements Eating {
+            public static String CATEGORY = "domestic";
+            private String name;
+            protected abstract String getSound();
+            // constructor, standard getters and setters omitted 
+        }
+        
+        public interface Locomotion {
+            String getLocomotion();
+        }
+        
+        public class Goat extends Animal implements Locomotion {
+            @Override
+            protected String getSound() {
+                return "bleat";
+            }
+            @Override
+            public String getLocomotion() {
+                return "walks";
+            }
+            @Override
+            public String eats() {
+                return "grass";
+            }
+            // constructor omitted
+        }
+        
+        public class Bird extends Animal {
+            private boolean walks;
+            public Bird() {
+                super("bird");
+            }
+            public Bird(String name, boolean walks) {
+                super(name);
+                setWalks(walks);
+            }
+            public Bird(String name) {
+                super(name);
+            }
+            public boolean walks() {
+                return walks;
+            }
+            // standard setters and overridden methods
+        }
+            
 ----------------------------------
         
