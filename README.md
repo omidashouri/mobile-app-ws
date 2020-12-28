@@ -1740,6 +1740,13 @@ Reflection:
             Bird bird = new Bird();
             Method walksMethod = bird.getClass().getDeclaredMethod("walks");
             Method setWalksMethod = bird.getClass().getDeclaredMethod("setWalks", boolean.class);
+
+            AnnotationConfigApplicationContext context = new 
+                                            AnnotationConfigApplicationContext(ApplicationConfiguration.class);
+            EmployeeRepository employeeRepository =  context.getBean(EmployeeRepository.class);
+            Method deleteByEmailMethod = employeeRepository.getClass().getDeclaredMethod("deleteByEmail", String.class);
+            deleteByEmailMethod.setAccessible(True);
+            deleteByEmailMethod.invoke(employeeRepository, "o.ashouri@imi.ir");
             
         2)invoke a method at runtime:
             Class<?> birdClass = Class.forName("com.baeldung.reflection.Bird");
@@ -1800,4 +1807,22 @@ Reflection:
         }
             
 ----------------------------------
-        
+
+Evaluate Example:
+    -Access Object in tree format:
+    -:_
+        Evaluate employeeRepository:
+        result {Proxy}: employeeRepositoryImpl
+            |-> h {JdkDynamicAopProxy}: JdkDynamicAopProxy
+                | -> advised {ProxyFactor}: ProxyFactor
+                        | -> aopProxyFactor {DefaultAopProxyFactor}:  
+                        | -> targetSource {SingletonTargetSource}: SingletonTargetSource
+                                | -> target {EmployeeRepositoryImpl}: 
+                                        | -> 
+
+((SingletonTargetSource) ((JdkDynamicAopProxy) ((Proxy)employeeRepository).h).advised.targetSource)
+                                                                            .target.getClass().getDeclaredMethods()
+
+
+
+----------------------------------
