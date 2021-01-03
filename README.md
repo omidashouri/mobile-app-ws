@@ -1755,6 +1755,34 @@ Reflection:
             setWalksMethod.invoke(bird, true);
             Method walksMethod = birdClass.getDeclaredMethod("walks");
             boolean walks = (boolean) walksMethod.invoke(bird);
+
+    -Read Method for Collections:
+        -example 1: (for study)
+        :_
+        Type returnType = method.getGenericReturnType();
+        if (returnType instanceof Class<?>) {
+            return (Class<?>)returnType;
+        } else if(returnType instanceof ParameterizedType) {
+        return getClass(((ParameterizedType)returnType).getRawType()); }
+        _:        
+
+        -example 2: (for study)
+        :_
+        Field field = MyClass.class.getField("stringList");
+        Type genericFieldType = field.getGenericType();
+        if(genericFieldType instanceof ParameterizedType){
+            ParameterizedType aType = (ParameterizedType) genericFieldType;
+        Type[] fieldArgTypes = aType.getActualTypeArguments();
+            for(Type fieldArgType : fieldArgTypes){
+                Class fieldArgClass = (Class) fieldArgType;
+                System.out.println("fieldArgClass = " + fieldArgClass);
+            }
+        }
+        _:
+        -example 3: (with PropertyDescriptor)
+        Type[] types = ((ParameterizedType) ...getPropertyDescriptor().getReadMethod().getGenericReturntype())
+                                                                                            .getActualTypeArguments();
+        String fullPackageName = types[0].getTypeName();
     
     -examples:
         public interface Eating {
