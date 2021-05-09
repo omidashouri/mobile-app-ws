@@ -1854,3 +1854,28 @@ Evaluate Example:
 
 
 ----------------------------------
+
+Register Component that implement Interface:
+
+-solution 1:
+    @Component
+    public class myClass implement InterfaceA{
+    
+        @override
+        public A methodA(){
+            A a = new A();
+            return a;
+        }
+    }
+
+-solution 2: override the methodA through lambda
+    @Configuration
+    public class myConfiguration(){
+        @Bean
+        public InterfaceA(){
+            () -> new A();
+        }
+    }
+
+
+----------------------------------
